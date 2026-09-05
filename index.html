@@ -1,0 +1,3161 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<title>The &ldquo;Investor&rdquo; — $INVSTR</title>
+<meta name="description" content="A limited series. One man, one basement, one position he refuses to close.">
+<meta name="theme-color" content="#0a0a0a">
+
+<meta property="og:type" content="website">
+<meta property="og:title" content="The &quot;Investor&quot; — $INVSTR">
+<meta property="og:description" content="A limited series. One man, one basement, one position he refuses to close.">
+<meta property="og:image" content="https://REPLACE-WITH-YOUR-DOMAIN.example/hero.jpg">
+<meta property="og:url" content="https://REPLACE-WITH-YOUR-DOMAIN.example/">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="The &quot;Investor&quot; — $INVSTR">
+<meta name="twitter:description" content="A limited series. One man, one basement, one position he refuses to close.">
+<meta name="twitter:image" content="https://REPLACE-WITH-YOUR-DOMAIN.example/hero.jpg">
+
+<link rel="icon" href="face.jpg">
+<link rel="preload" as="image" href="hero.jpg" fetchpriority="high">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600;700;800;900&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+
+<link rel="stylesheet" href="motion-kit.css">
+
+<style>
+  :root{
+    --ground: oklch(0.09 0 0);
+    --panel:  oklch(0.15 0 0);
+    --panel-2:oklch(0.20 0 0);
+    --line:   oklch(0.28 0 0);
+    --ink:    oklch(0.97 0 0);
+    --ink-dim:oklch(0.74 0 0);
+    --ink-faint:oklch(0.55 0 0);
+
+    --red:    oklch(0.55 0.215 27);
+    --red-hi: oklch(0.62 0.220 27);
+    --gold:   oklch(0.82 0.130 82);
+    --gold-deep:oklch(0.60 0.110 72);
+
+    --mk-warm: oklch(0.88 0.13 80 / 0.16);
+    --mk-cool: oklch(0.35 0.09 265 / 0.30);
+    --mk-shade:oklch(0.04 0 0 / 0.90);
+    --mk-grain:0.16;
+  }
+
+  *{box-sizing:border-box}
+  html{-webkit-text-size-adjust:100%;background:var(--ground);scroll-behavior:smooth}
+
+  body{
+    margin:0;background:var(--ground);color:var(--ink);
+    font-family:Archivo,"Helvetica Neue",Helvetica,Arial,sans-serif;
+    font-size:16px;line-height:1.55;-webkit-font-smoothing:antialiased;
+    overflow-x:hidden;
+  }
+
+  img{max-width:100%;display:block}
+  ::selection{background:var(--red);color:#fff}
+  :focus-visible{outline:2px solid var(--ink);outline-offset:3px}
+  h1,h2,h3,h4{margin:0;font-weight:700;text-wrap:balance}
+  .mono{font-family:"IBM Plex Mono",ui-monospace,Menlo,monospace;font-variant-numeric:tabular-nums}
+
+  .pad{padding:0 clamp(18px,4vw,54px)}
+
+
+  /* ============================================================
+     OPENING TITLE SEQUENCE
+     The genre move is the extreme close-up that pulls back through
+     a curtain of light beams. This is that shape, composed from
+     scratch with our own mark - beams rise, the camera retreats
+     from inside the letterforms, the word ignites, then it pushes
+     past you.
+     ============================================================ */
+  #intro{
+    position:fixed;inset:0;z-index:160;
+    background:#000;
+    display:grid;place-items:center;
+    overflow:hidden;
+  }
+
+  #intro.done{ animation:introOut 1200ms cubic-bezier(0.6,0,0.2,1) forwards; }
+
+  @keyframes introOut{
+    from{opacity:1;transform:scale(1)}
+    to  {opacity:0;transform:scale(1.35);visibility:hidden}
+  }
+
+  /* the camera: starts inside a single stroke, retreats to the word */
+  .seq{
+    transform-origin:41% 50%;
+    animation:pullback 2300ms cubic-bezier(0.66,0.02,0.20,1) 40ms both;
+    will-change:transform;
+  }
+
+  @keyframes pullback{
+    0%  {transform:scale(7)}
+    62% {transform:scale(1.30)}
+    88% {transform:scale(1.02)}
+    100%{transform:scale(1)}
+  }
+
+  .mark{position:relative;display:inline-block;padding:0 .04em}
+
+  .markText{
+    display:flex;align-items:flex-end;justify-content:center;
+    font-family:Archivo,sans-serif;font-weight:900;
+    font-size:clamp(34px,9.4vw,124px);
+    line-height:1;letter-spacing:-0.02em;
+    text-transform:uppercase;
+    color:oklch(0.26 0.10 27);
+    transition:none;
+    animation:ignite 900ms ease 1650ms both;
+    white-space:nowrap;
+  }
+
+  .markText b{
+    display:inline-block;
+    transform:scaleY(var(--bow,1)) translateY(0);
+    transform-origin:50% 100%;
+  }
+
+  /* the letters snap in one by one from a solid red slab, centre out */
+  .markText b{
+    animation:letterIn 420ms cubic-bezier(0.2,0.9,0.2,1) both;
+    animation-delay:calc(1680ms + var(--i) * 30ms);
+  }
+  @keyframes letterIn{
+    from{transform:scaleY(calc(var(--bow,1) * 1.9)) scaleX(0.3);opacity:0}
+    to  {transform:scaleY(var(--bow,1)) scaleX(1);opacity:1}
+  }
+
+  /* the ribbons: the word breaks into a spectrum of strands that fall
+     away and rush past the camera, then the cut to black */
+  .ribbons{
+    position:absolute;left:-6%;right:-6%;top:58%;height:180vh;
+    display:flex;justify-content:center;gap:2px;
+    pointer-events:none;z-index:1;
+    transform-origin:50% 0;
+    perspective:600px;
+  }
+  .ribbons i{
+    flex:0 0 clamp(2px,0.55vw,7px);
+    background:linear-gradient(180deg, var(--c) 0%, var(--c) 55%, transparent 100%);
+    transform:scaleY(0) skewX(calc(var(--k) * 1deg));
+    transform-origin:50% 0;
+    opacity:0;
+    filter:saturate(1.3);
+    animation:ribbonFall 1500ms cubic-bezier(0.6,0,0.15,1) both;
+    animation-delay:calc(2350ms + var(--d) * 8ms);
+  }
+  @keyframes ribbonFall{
+    0%  {transform:scaleY(0) skewX(calc(var(--k) * 1deg));opacity:0}
+    18% {opacity:1}
+    100%{transform:scaleY(1) skewX(calc(var(--k) * 2.4deg)) translateZ(180px);opacity:0}
+  }
+
+  /* and the camera dives through the word at the end */
+  .seq.dive{animation:dive 1100ms cubic-bezier(0.7,0,0.3,1) 2550ms both}
+  @keyframes dive{
+    from{transform:scale(1)}
+    to  {transform:scale(2.6) translateY(-6%)}
+  }
+
+  @keyframes ignite{
+    from{color:oklch(0.26 0.10 27);text-shadow:none}
+    60% {color:oklch(0.68 0.24 28);text-shadow:0 0 42px oklch(0.55 0.22 27 / .85)}
+    to  {color:var(--red);text-shadow:0 0 26px oklch(0.55 0.22 27 / .45)}
+  }
+
+  /* the beams live inside the letterforms */
+  .beams{
+    position:absolute;inset:-14% 0;
+    display:flex;justify-content:center;gap:clamp(2px,0.45vw,5px);
+    mix-blend-mode:screen;pointer-events:none;
+  }
+
+  .beams i{
+    flex:0 0 clamp(3px,0.85vw,9px);
+    align-self:stretch;
+    background:linear-gradient(180deg,
+      transparent 0%,
+      oklch(0.72 0.22 29) 18%,
+      oklch(0.92 0.16 40) 50%,
+      oklch(0.72 0.22 29) 82%,
+      transparent 100%);
+    transform:scaleY(0);
+    opacity:0;
+    animation:
+      beamUp   700ms cubic-bezier(0.22,1,0.36,1) both,
+      beamOut  900ms cubic-bezier(0.6,0,0.2,1) both;
+    animation-delay:calc(var(--b) * 30ms), calc(1650ms + var(--b) * 20ms);
+  }
+
+  @keyframes beamUp { to{transform:scaleY(1);opacity:.95} }
+  @keyframes beamOut{ to{transform:scaleY(0.04);opacity:0} }
+
+  /* one hard flare across the word as it ignites */
+  .flare{
+    position:absolute;top:-40%;bottom:-40%;width:14%;z-index:3;
+    background:linear-gradient(90deg,transparent,oklch(0.99 0.04 60 / .8),transparent);
+    filter:blur(10px);
+    transform:translateX(-520%) skewX(-12deg);
+    animation:flareGo 900ms cubic-bezier(0.4,0,0.2,1) 1800ms both;
+  }
+
+  @keyframes flareGo{ to{transform:translateX(620%) skewX(-12deg)} }
+
+  .intro-sub{
+    position:absolute;left:0;right:0;bottom:15vh;text-align:center;
+    font-family:"IBM Plex Mono",monospace;font-size:11px;
+    letter-spacing:.34em;text-transform:uppercase;color:var(--ink-faint);
+    opacity:0;animation:fadeUp 1100ms ease 4250ms forwards;
+  }
+
+  @keyframes fadeUp{ from{opacity:0;transform:translateY(8px)} to{opacity:.9;transform:none} }
+
+  #introSkip{
+    position:absolute;right:22px;bottom:22px;
+    font-family:Archivo,sans-serif;font-size:12px;font-weight:600;
+    letter-spacing:.1em;text-transform:uppercase;
+    background:transparent;border:1px solid var(--line);color:var(--ink-faint);
+    padding:9px 16px;border-radius:4px;cursor:pointer;
+    opacity:0;animation:fadeUp 500ms ease 1200ms forwards;
+  }
+
+  #introSkip:hover{color:var(--ink);border-color:var(--ink-faint)}
+
+  html.intro-lock,body.intro-lock{overflow:hidden}
+
+  @media (prefers-reduced-motion:reduce){
+    #intro{display:none}
+  }
+
+  /* ============================================================
+     TOP BAR
+     ============================================================ */
+  .nav{
+    position:fixed;top:0;left:0;right:0;z-index:60;
+    display:flex;align-items:center;gap:22px;
+    padding:16px clamp(18px,4vw,54px);
+    background:linear-gradient(180deg, oklch(0.05 0 0 / .92) 0%, transparent 100%);
+    transition:background 320ms var(--mk-out);
+  }
+
+  .nav.solid{background:oklch(0.07 0 0 / .97);border-bottom:1px solid var(--line)}
+
+  .brand{
+    display:flex;align-items:center;gap:9px;text-decoration:none;flex:0 0 auto;
+  }
+
+  .brand img{
+    width:26px;height:26px;border-radius:4px;
+  }
+
+  .brand b{
+    font-weight:900;letter-spacing:-0.02em;font-size:18px;
+    color:var(--red);text-transform:uppercase;
+    display:inline-flex;align-items:flex-end;
+  }
+  .brand b b{display:inline-block;transform:scaleY(var(--bow,1));transform-origin:50% 100%;letter-spacing:0}
+
+  .nav ul{
+    list-style:none;display:flex;gap:18px;padding:0;margin:0;
+    font-size:13.5px;color:var(--ink-dim);
+  }
+
+  .nav ul a{color:inherit;text-decoration:none}
+  .nav ul a:hover{color:var(--ink)}
+  .nav ul li[aria-current]{color:var(--ink);font-weight:600}
+
+  .nav-right{margin-left:auto;display:flex;align-items:center;gap:14px}
+
+  .avatar{
+    width:30px;height:30px;border-radius:4px;border:1px solid var(--line);
+  }
+
+  @media (max-width:720px){ .nav ul{display:none} }
+
+  /* ============================================================
+     BILLBOARD
+     ============================================================ */
+  .bb{position:relative;min-height:min(88vh,760px);display:flex;align-items:flex-end}
+
+  .bb-art{position:absolute;inset:0;overflow:hidden}
+  .bb-art img{width:100%;height:100%;object-fit:cover;object-position:center 42%}
+
+  .bb-scrim{
+    position:absolute;inset:0;
+    background:
+      linear-gradient(90deg, oklch(0.06 0 0 / .96) 0%, oklch(0.06 0 0 / .55) 46%, transparent 78%),
+      linear-gradient(0deg, var(--ground) 2%, transparent 42%);
+  }
+
+  .bb-in{position:relative;z-index:2;padding-bottom:clamp(38px,6vw,74px);max-width:620px}
+
+  .bb-badge{
+    display:inline-flex;align-items:center;gap:8px;
+    font-family:"IBM Plex Mono",monospace;font-size:11px;
+    letter-spacing:.18em;text-transform:uppercase;color:var(--ink-dim);
+    margin:0 0 14px;
+  }
+
+  .bb-badge b{color:var(--red);font-weight:800;letter-spacing:.1em}
+
+  .bb h1{
+    font-size:clamp(38px,7.6vw,86px);line-height:.94;
+    font-weight:900;letter-spacing:-0.035em;margin:0 0 6px;
+  }
+
+  .bb h1 q{quotes:none;color:var(--gold)}
+
+  .bb-meta{
+    display:flex;flex-wrap:wrap;gap:8px 14px;align-items:center;
+    font-family:"IBM Plex Mono",monospace;font-size:12px;
+    color:var(--ink-dim);margin:12px 0 14px;
+  }
+
+  .bb-meta b{
+    color:var(--ink);font-weight:600;border:1px solid var(--line);
+    padding:2px 7px;border-radius:3px;font-size:11px;
+  }
+
+  .bb-syn{color:var(--ink-dim);font-size:16.5px;margin:0 0 22px;max-width:52ch}
+
+  .bb-actions{display:flex;gap:10px;flex-wrap:wrap}
+
+  .btn{
+    font-family:Archivo,sans-serif;font-size:14px;font-weight:700;
+    border:1px solid var(--line);background:oklch(0.24 0 0 / .8);color:var(--ink);
+    border-radius:5px;padding:12px 22px;cursor:pointer;
+    display:inline-flex;align-items:center;gap:9px;
+    transition:background 150ms var(--mk-out),border-color 150ms var(--mk-out),color 150ms var(--mk-out);
+  }
+
+  .btn:hover{background:oklch(0.32 0 0 / .9)}
+
+  .btn.play{background:var(--ink);color:#000;border-color:var(--ink)}
+  .btn.play:hover{background:#fff}
+
+  .btn.red{background:var(--red);border-color:var(--red);color:#fff}
+  .btn.red:hover{background:var(--red-hi);border-color:var(--red-hi)}
+
+  .btn.ghost{background:transparent;color:var(--ink-faint)}
+  .btn.ghost:hover{color:var(--ink)}
+
+
+  /* ============================================================
+     THE 3D SET
+     A real WebGL scene, built entirely from primitives - no
+     models, no textures to download. The character is a stick
+     figure with a square head, which is exactly the geometry a
+     renderer can make from boxes and cylinders.
+     ============================================================ */
+  #scene3d{position:absolute;inset:0;width:100%;height:100%;display:block}
+
+  .bb-fallback{position:absolute;inset:0;overflow:hidden}
+  .bb-fallback img{width:100%;height:100%;object-fit:cover;object-position:center 42%}
+  .has3d .bb-fallback{display:none}
+
+  /* ---------- the big red play button ---------- */
+  /* The page opens on black. Nothing but the button, so the set and
+     the title sequence are both things you choose to start. */
+  .playstage{
+    position:fixed;inset:0;
+    background:#000;
+    display:grid;place-items:center;z-index:150;
+    perspective:900px;
+  }
+
+  .playstage.gone{
+    opacity:0;visibility:hidden;pointer-events:none;
+    transition:opacity 500ms var(--mk-in-out),visibility 500ms;
+  }
+
+  .playstage .presents{
+    position:absolute;left:0;right:0;
+    top:calc(50% - clamp(128px,17vw,188px));
+    text-align:center;
+    font-family:"IBM Plex Mono",monospace;font-size:11px;
+    letter-spacing:.34em;text-transform:uppercase;color:var(--ink-faint);
+    opacity:0;animation:fadeUp 600ms ease 160ms forwards;
+  }
+
+  /* a solid red triangle with real thickness: eight slabs behind a face,
+     each one a shade darker, all sharing the same triangle */
+  .play3d{
+    --tri:polygon(8% 4%, 96% 50%, 8% 96%);
+    position:relative;width:clamp(150px,19vw,220px);aspect-ratio:1;
+    transform-style:preserve-3d;
+    transform:rotateY(-22deg) rotateX(12deg);
+    border:0;background:none;padding:0;cursor:pointer;
+    pointer-events:auto;
+    transition:transform 160ms var(--mk-out);
+    animation:playPop 420ms cubic-bezier(0.2,1.2,0.3,1) 120ms both, playIdle 2.6s ease-in-out 540ms infinite;
+  }
+
+  @keyframes playPop{
+    from{transform:rotateY(-70deg) rotateX(12deg) scale(0.4);opacity:0}
+    to  {transform:rotateY(-22deg) rotateX(12deg) scale(1);opacity:1}
+  }
+
+  @keyframes playIdle{
+    0%,100%{transform:rotateY(-22deg) rotateX(12deg) translateY(0)}
+    50%    {transform:rotateY(-14deg) rotateX(8deg) translateY(-8px)}
+  }
+
+  .play3d:hover{animation:none;transform:rotateY(-8deg) rotateX(6deg) translateZ(30px) scale(1.06)}
+  .play3d:active{animation:none;transform:rotateY(-8deg) rotateX(6deg) translateZ(-10px) scale(.96)}
+
+  .play3d i{
+    position:absolute;inset:0;
+    clip-path:var(--tri);
+    background:oklch(calc(0.40 - var(--d) * 0.018) 0.16 27);
+    transform:translateZ(calc(var(--d) * -3.2px));
+  }
+
+  .play3d .face{
+    position:absolute;inset:0;
+    clip-path:var(--tri);
+    background:
+      linear-gradient(135deg, oklch(0.78 0.20 32) 0%, var(--red) 42%, oklch(0.50 0.20 27) 100%);
+    transform:translateZ(2px);
+  }
+
+  /* a sliver of highlight along the top edge */
+  .play3d .face::after{
+    content:"";position:absolute;inset:0;
+    clip-path:polygon(8% 4%, 96% 50%, 60% 50%, 12% 12%);
+    background:linear-gradient(180deg, oklch(1 0 0 / .32), transparent 70%);
+  }
+
+  .play3d .glow{
+    position:absolute;inset:-30%;border-radius:50%;
+    background:radial-gradient(circle at 45% 50%, var(--red) 0%, transparent 60%);
+    opacity:.34;filter:blur(30px);transform:translateZ(-40px);
+    animation:pulseGlow 3.2s ease-in-out infinite;
+  }
+
+  @keyframes pulseGlow{0%,100%{opacity:.28;transform:translateZ(-30px) scale(1)}50%{opacity:.5;transform:translateZ(-30px) scale(1.1)}}
+
+  .play-label{
+    position:absolute;left:0;right:0;bottom:-46px;text-align:center;
+    font-family:"IBM Plex Mono",monospace;font-size:11px;
+    letter-spacing:.3em;text-transform:uppercase;color:var(--ink-dim);
+    transform:translateZ(10px);
+    bottom:-34px;
+  }
+
+  /* the billboard copy waits until the set has been played */
+  .bb-in > *{opacity:0;transform:translateY(22px)}
+  .bb-in.shown > *{
+    animation:bbUp 820ms var(--mk-out) both;
+    animation-delay:calc(var(--i, 0) * 120ms + 900ms);
+  }
+  @keyframes bbUp{ to{opacity:1;transform:none} }
+
+  @media (prefers-reduced-motion:reduce){
+    .play3d,.play3d .glow{animation:none}
+    .bb-in > *{opacity:1;transform:none;animation:none}
+    /* no black gate for anyone who asked for less motion */
+    .playstage{position:absolute;inset:0 0 18% 0;background:transparent;z-index:5}
+  }
+
+  /* ============================================================
+     ROWS
+     ============================================================ */
+  .row{margin:0 0 clamp(30px,4.4vw,52px)}
+  .row:first-of-type{margin-top:-8px}
+
+  .row-head{
+    display:flex;align-items:baseline;gap:12px;
+    margin:0 0 12px;
+  }
+
+  .row-head h2{font-size:clamp(16px,2.2vw,21px);font-weight:700;letter-spacing:-0.01em}
+
+  .row-head span{
+    font-family:"IBM Plex Mono",monospace;font-size:11px;
+    color:var(--ink-faint);letter-spacing:.1em;text-transform:uppercase;
+  }
+
+  .rail{
+    display:flex;gap:10px;overflow-x:auto;
+    padding:4px 0 14px;scrollbar-width:none;cursor:grab;
+    scroll-snap-type:x proximity;
+  }
+
+  .rail::-webkit-scrollbar{display:none}
+  .rail.dragging{cursor:grabbing;scroll-snap-type:none}
+
+  .card{
+    flex:0 0 auto;width:clamp(200px,26vw,272px);
+    scroll-snap-align:start;
+    background:var(--panel);border-radius:5px;overflow:hidden;
+    border:1px solid transparent;
+    transition:transform 340ms var(--mk-out),border-color 200ms var(--mk-out);
+    text-align:left;padding:0;color:inherit;font:inherit;cursor:pointer;
+  }
+
+  .card:hover{transform:scale(1.055);border-color:var(--line);z-index:3}
+
+  .card-still{position:relative;aspect-ratio:16/9;overflow:hidden;background:var(--panel-2)}
+
+  .card-still img{
+    width:100%;height:100%;object-fit:cover;object-position:center 36%;
+    transition:transform 620ms var(--mk-out);
+  }
+
+  .card:hover .card-still img{transform:scale(1.08)}
+
+  .tag{
+    position:absolute;left:8px;top:8px;
+    font-family:"IBM Plex Mono",monospace;font-size:10px;font-weight:600;
+    background:oklch(0.06 0 0 / .84);color:var(--ink);
+    padding:3px 7px;border-radius:3px;letter-spacing:.1em;
+  }
+
+  .tag.live{background:var(--red);color:#fff}
+
+  .snd-btn{
+    font:600 11px "IBM Plex Mono",monospace;letter-spacing:.08em;color:var(--ink-dim);
+    background:var(--panel-2);border:1px solid var(--line);border-radius:3px;
+    padding:3px 8px;margin-left:10px;cursor:pointer;vertical-align:middle;
+  }
+  .snd-btn:hover{color:var(--ink)}
+  .runtime.soon{color:var(--red-hi);letter-spacing:.12em}
+  .runtime{
+    position:absolute;right:8px;bottom:8px;
+    font-family:"IBM Plex Mono",monospace;font-size:10px;
+    background:oklch(0.06 0 0 / .84);color:var(--ink-dim);
+    padding:2px 6px;border-radius:3px;
+  }
+
+  .prog{position:absolute;left:0;right:0;bottom:0;height:3px;background:oklch(0.34 0 0)}
+  .prog i{display:block;height:100%;background:var(--red);width:0}
+
+  .card-body{padding:10px 12px 12px}
+  .card-body h4{font-size:14px;font-weight:600;margin:0 0 4px}
+  .card-body p{margin:0;font-size:12.5px;color:var(--ink-faint);line-height:1.45}
+
+  /* ---------- the news wire ---------- */
+  .wire{
+    display:flex;align-items:stretch;
+    margin:-6px 0 26px;border:1px solid var(--line);border-radius:5px;overflow:hidden;
+    background:var(--panel);font-family:"IBM Plex Mono",monospace;font-size:11.5px;
+  }
+  .wire-tag{
+    flex:0 0 auto;display:flex;align-items:center;gap:8px;
+    padding:9px 14px;background:var(--red);color:#fff;font-weight:700;
+    letter-spacing:.18em;text-transform:uppercase;font-size:10px;
+  }
+  .wire-tag::before{content:"";width:6px;height:6px;border-radius:50%;background:#fff;animation:blink 1.2s infinite}
+  .wire-track{flex:1;overflow:hidden;position:relative;display:flex;align-items:center;
+    mask-image:linear-gradient(90deg,transparent,#000 4%,#000 96%,transparent)}
+  .wire-run{display:flex;gap:44px;white-space:nowrap;padding-left:100%;color:var(--ink-dim);
+    animation:wire 46s linear infinite}
+  .wire-run span b{color:var(--ink)}
+  .wire-run span i{font-style:normal;color:var(--red-hi);margin-right:8px}
+  .wire-run span em{font-style:normal;color:oklch(0.78 0.16 145);margin-right:8px}
+  @keyframes wire{to{transform:translateX(-100%)}}
+  .wire:hover .wire-run{animation-play-state:paused}
+
+  /* ---------- rows arrive as you reach them ---------- */
+  .row.reveal{opacity:0;transform:translateY(18px);transition:opacity 700ms var(--mk-out),transform 700ms var(--mk-out)}
+  .row.reveal.in{opacity:1;transform:none}
+  .row-head h2{position:relative;padding-left:14px}
+  .row-head h2::before{content:"";position:absolute;left:0;top:.2em;bottom:.15em;width:4px;border-radius:2px;background:var(--red)}
+
+  /* ---------- episode cards: original badge, rank pip ---------- */
+  .card-orig{
+    position:absolute;left:8px;bottom:8px;z-index:3;
+    font:800 9px Archivo,sans-serif;letter-spacing:.16em;text-transform:uppercase;
+    color:#fff;background:var(--red);padding:3px 6px;border-radius:2px;
+    opacity:0;transform:translateY(4px);transition:opacity 200ms var(--mk-out),transform 200ms var(--mk-out);
+  }
+  .card:hover .card-orig{opacity:1;transform:none}
+  .card-new{
+    position:absolute;left:8px;top:30px;z-index:3;
+    font:800 9px Archivo,sans-serif;letter-spacing:.14em;text-transform:uppercase;
+    color:#000;background:var(--gold);padding:3px 6px;border-radius:2px;
+  }
+
+  /* ---------- top 6: the numbers count up, the cards lift ---------- */
+  .rail.ten .card{transition:transform 340ms var(--mk-out)}
+  .rail.ten .card:hover{transform:translateY(-4px)}
+  .ten-body b{font-variant-numeric:tabular-nums}
+
+  /* ---------- top 10 ---------- */
+  .rail.ten .card{width:clamp(230px,30vw,300px);background:transparent;border:0;display:flex;align-items:center;gap:0}
+  .rail.ten .card:hover{transform:scale(1.03)}
+
+  .rail.ten .rank{opacity:0;transform:translateX(-26px)}
+  .rail.ten.seen .rank{
+    animation:rankIn 700ms var(--mk-out) both;
+    animation-delay:calc(var(--r) * 90ms);
+  }
+  @keyframes rankIn{to{opacity:1;transform:none}}
+
+  .rank{
+    font-weight:900;font-size:clamp(84px,13vw,142px);line-height:.78;
+    letter-spacing:-0.08em;flex:0 0 auto;
+    color:var(--ground);
+    -webkit-text-stroke:2.5px var(--line);
+    margin-right:-8px;
+  }
+
+  .ten-body{
+    flex:1 1 auto;background:var(--panel);border-radius:5px;
+    padding:14px 14px 15px;border:1px solid var(--line);
+  }
+
+  .ten-body b{
+    display:block;font-family:"IBM Plex Mono",monospace;
+    font-size:clamp(19px,2.6vw,25px);font-weight:600;
+    color:var(--red);line-height:1;margin-bottom:5px;
+  }
+
+  .ten-body span{
+    font-family:"IBM Plex Mono",monospace;font-size:10px;
+    letter-spacing:.13em;text-transform:uppercase;color:var(--ink-faint);
+  }
+
+  /* ============================================================
+     LIVE CHANNEL
+     ============================================================ */
+  .live-wrap{
+    display:grid;grid-template-columns:1.15fr 1fr;gap:0;
+    border:1px solid var(--line);border-radius:7px;overflow:hidden;
+    background:var(--panel);
+  }
+
+  .live-screen{padding:26px 24px;border-right:1px solid var(--line)}
+
+  .live-tag{
+    display:inline-flex;align-items:center;gap:7px;
+    font-family:"IBM Plex Mono",monospace;font-size:10.5px;font-weight:600;
+    letter-spacing:.14em;text-transform:uppercase;color:#fff;
+    background:var(--red);padding:3px 9px;border-radius:3px;margin:0 0 16px;
+  }
+
+  .live-tag i{
+    width:6px;height:6px;border-radius:50%;background:#fff;display:block;
+    animation:blip 1.6s ease-in-out infinite;
+  }
+
+  @keyframes blip{0%,100%{opacity:1}50%{opacity:.25}}
+
+  .pnl{
+    font-family:"IBM Plex Mono",monospace;font-weight:600;
+    font-size:clamp(32px,6.4vw,56px);line-height:1;
+    color:var(--red);letter-spacing:-0.02em;margin:0;
+  }
+
+  .pnl-sub{
+    font-family:"IBM Plex Mono",monospace;font-size:11.5px;
+    color:var(--ink-faint);margin:9px 0 0;
+  }
+
+  .spark{width:100%;height:78px;display:block;margin:16px 0 0}
+
+  .live-side{padding:26px 24px;display:flex;flex-direction:column;justify-content:center}
+
+  .live-side h3{font-size:17px;margin:0 0 6px}
+  .live-side p{margin:0 0 18px;font-size:13.5px;color:var(--ink-faint)}
+
+  .live-actions{display:flex;flex-wrap:wrap;gap:8px}
+  .live-actions .btn{font-size:13px;padding:10px 16px}
+
+  .dips{font-family:"IBM Plex Mono",monospace;font-size:11px;color:var(--ink-faint);margin:14px 0 0}
+
+  @media (max-width:760px){
+    .live-wrap{grid-template-columns:1fr}
+    .live-screen{border-right:0;border-bottom:1px solid var(--line)}
+  }
+
+  /* ============================================================
+     BONUS FEATURE — the interview
+     ============================================================ */
+  .interview{
+    display:grid;grid-template-columns:170px 1fr;gap:26px;align-items:center;
+    background:var(--panel);border:1px solid var(--line);
+    border-radius:7px;padding:26px 24px;
+  }
+
+  .interview img{width:170px;height:170px;border-radius:5px;object-fit:cover}
+
+  .quote{
+    font-size:clamp(19px,3vw,27px);line-height:1.28;font-weight:600;
+    margin:0 0 18px;min-height:2.6em;letter-spacing:-0.01em;
+  }
+
+  @media (max-width:620px){
+    .interview{grid-template-columns:1fr;text-align:center}
+    .interview img{margin:0 auto;width:140px;height:140px}
+  }
+
+  /* ============================================================
+     PLAYBACK SETTINGS — conviction
+     ============================================================ */
+  .settings{
+    background:var(--panel);border:1px solid var(--line);
+    border-radius:7px;padding:24px;
+  }
+
+  .set-row{display:flex;align-items:center;gap:16px;flex-wrap:wrap}
+
+  .set-row label{
+    font-family:"IBM Plex Mono",monospace;font-size:11px;
+    letter-spacing:.14em;text-transform:uppercase;color:var(--ink-faint);
+  }
+
+  input[type=range]{flex:1 1 220px;accent-color:var(--red);height:26px;cursor:pointer}
+
+  .set-val{
+    font-family:"IBM Plex Mono",monospace;font-weight:600;font-size:23px;
+    color:var(--red);min-width:70px;text-align:right;
+  }
+
+  .set-out{font-size:clamp(16px,2.4vw,21px);line-height:1.35;margin:18px 0 0;font-weight:600}
+
+
+  /* ============================================================
+     THE INTERACTIVE SPECIAL — a crash game
+     Same distribution real crash games use: P(crash > x) = e/x,
+     so the expected value of holding is flat and the only thing
+     that ever changes is your nerve.
+     ============================================================ */
+  .game{
+    display:grid;
+    grid-template-columns:minmax(0,1fr) 300px;
+    justify-content:stretch;
+    gap:1px;
+    background:var(--line);border:1px solid var(--line);
+    border-radius:7px;overflow:hidden;
+    max-width:1240px;
+  }
+
+  .game-chart{position:relative;background:#0b0b0c;min-height:520px}
+  #crashCanvas{display:block;width:100%;height:520px}
+
+  .game-mult{
+    position:absolute;left:0;right:0;top:11%;
+    text-align:center;pointer-events:none;
+    font-family:"IBM Plex Mono",monospace;font-weight:600;
+    font-size:clamp(34px,5vw,52px);line-height:1;
+    color:var(--ink);letter-spacing:-0.02em;
+    text-shadow:0 0 40px oklch(0.06 0 0 / .9);
+    transition:color 200ms linear;
+  }
+
+  .game-mult.up{color:oklch(0.80 0.16 145)}
+  .game-mult.bust{color:var(--red)}
+
+  .game-status{
+    position:absolute;left:0;right:0;top:calc(8% + clamp(40px,5.6vw,58px));
+    text-align:center;pointer-events:none;
+    font-family:"IBM Plex Mono",monospace;font-size:12px;
+    letter-spacing:.16em;text-transform:uppercase;color:var(--ink-faint);
+  }
+
+  .rugged{
+    position:absolute;inset:0;display:grid;place-items:center;
+    pointer-events:none;opacity:0;
+  }
+
+  /* the whole chart flinches when it goes */
+  .game-chart.shake{animation:shake 520ms cubic-bezier(.36,.07,.19,.97) both}
+  @keyframes shake{
+    10%,90%{transform:translate3d(-2px,0,0)}
+    20%,80%{transform:translate3d(4px,0,0)}
+    30%,50%,70%{transform:translate3d(-7px,0,0)}
+    40%,60%{transform:translate3d(7px,0,0)}
+  }
+
+  .game-flash{position:absolute;inset:0;pointer-events:none;opacity:0}
+  .game-flash.red{background:radial-gradient(circle at 50% 60%, oklch(0.55 0.22 27 / .55), transparent 70%);animation:flash 700ms ease-out both}
+  .game-flash.gold{background:radial-gradient(circle at 50% 50%, oklch(0.82 0.13 82 / .45), transparent 70%);animation:flash 600ms ease-out both}
+  @keyframes flash{from{opacity:1}to{opacity:0}}
+
+  .rugged > div{display:grid;justify-items:center;gap:10px}
+  .rugged small{
+    font-family:"IBM Plex Mono",monospace;font-size:12px;letter-spacing:.08em;
+    color:#fff;background:oklch(0.06 0 0 / .85);padding:6px 12px;border-radius:3px;
+  }
+  .rugged b{
+    font-family:Archivo,sans-serif;font-weight:900;
+    font-size:clamp(28px,5.6vw,62px);letter-spacing:-0.02em;
+    color:#fff;background:var(--red);
+    padding:10px 22px;border-radius:4px;
+    transform:rotate(-4deg);
+    box-shadow:0 18px 50px oklch(0.35 0.20 27 / .6);
+  }
+
+  .rugged.on{
+    opacity:1;
+    animation:ruggedIn 620ms cubic-bezier(0.22,1,0.36,1);
+  }
+
+  @keyframes ruggedIn{
+    0%  {opacity:0;transform:scale(1.5) rotate(-9deg)}
+    60% {opacity:1}
+    100%{opacity:1;transform:scale(1) rotate(0deg)}
+  }
+
+  .game-side{background:var(--panel);padding:20px 20px 22px;display:flex;flex-direction:column;gap:14px}
+
+  .bal{display:flex;align-items:baseline;justify-content:space-between;gap:10px}
+
+  .bal span{
+    font-family:"IBM Plex Mono",monospace;font-size:10.5px;
+    letter-spacing:.14em;text-transform:uppercase;color:var(--ink-faint);
+  }
+
+  .bal b{font-family:"IBM Plex Mono",monospace;font-size:22px;font-weight:600;color:var(--gold)}
+
+  .stake{display:flex;gap:6px}
+
+  .stake button{
+    flex:1 1 0;font-family:"IBM Plex Mono",monospace;font-size:12px;
+    background:var(--panel-2);border:1px solid var(--line);color:var(--ink-dim);
+    border-radius:4px;padding:8px 0;cursor:pointer;
+  }
+
+  .stake button[aria-pressed="true"]{background:var(--gold);border-color:var(--gold);color:#000;font-weight:600}
+
+  .game-btn{
+    font-family:Archivo,sans-serif;font-weight:800;font-size:16px;
+    border:0;border-radius:5px;padding:15px;cursor:pointer;width:100%;
+    letter-spacing:.02em;
+    transition:background 140ms var(--mk-out),transform 140ms var(--mk-out),opacity 140ms;
+  }
+
+  .game-btn:active{transform:scale(.985)}
+  .game-btn:disabled{opacity:.35;cursor:not-allowed}
+
+  .game-btn.buy{background:oklch(0.62 0.19 145);color:#04140a}
+  .game-btn.buy:hover:not(:disabled){background:oklch(0.70 0.20 145)}
+  .game-btn.sell{background:var(--red);color:#fff}
+  .game-btn.sell:hover:not(:disabled){background:var(--red-hi)}
+
+  .pos{
+    display:flex;align-items:baseline;justify-content:space-between;gap:8px;
+    background:var(--panel-2);border:1px solid var(--line);
+    border-radius:4px;padding:9px 11px;
+  }
+
+  .pos span{
+    font-family:"IBM Plex Mono",monospace;font-size:10px;
+    letter-spacing:.14em;text-transform:uppercase;color:var(--ink-faint);
+  }
+
+  .pos b{font-family:"IBM Plex Mono",monospace;font-size:16px;color:oklch(0.78 0.16 145)}
+
+  .sells{display:grid;grid-template-columns:repeat(3,1fr);gap:6px}
+
+  .sellpct{
+    font-family:Archivo,sans-serif;font-weight:700;font-size:13px;
+    background:var(--panel-2);border:1px solid var(--line);color:var(--ink);
+    border-radius:4px;padding:11px 0;cursor:pointer;
+    transition:background 140ms var(--mk-out),opacity 140ms;
+  }
+
+  .sellpct:hover:not(:disabled){background:var(--red);border-color:var(--red);color:#fff}
+  .sellpct:disabled{opacity:.3;cursor:not-allowed}
+  .sellpct.sell-all{grid-column:1 / -1;background:var(--red);border-color:var(--red);color:#fff}
+  .sellpct.sell-all:hover:not(:disabled){background:var(--red-hi)}
+
+  /* ---------- the ticker strip ---------- */
+  .tk{
+    grid-column:1 / -1;
+    display:flex;align-items:center;gap:18px;flex-wrap:wrap;
+    background:var(--panel);padding:10px 14px;
+  }
+  .tk-pair{display:flex;align-items:center;gap:8px;margin-right:6px}
+  .tk-pair img{width:22px;height:22px;border-radius:50%}
+  .tk-pair b{font-weight:800;font-size:14px}
+  .tk-pair span{color:var(--ink-faint);font-size:12px}
+  .tk-chain{
+    font-style:normal;font-family:"IBM Plex Mono",monospace;font-size:9px;letter-spacing:.12em;
+    background:var(--panel-2);border:1px solid var(--line);border-radius:3px;padding:2px 5px;color:var(--ink-dim);
+  }
+  .tk-stat{display:flex;flex-direction:column;gap:1px;min-width:58px}
+  .tk-stat span{font-family:"IBM Plex Mono",monospace;font-size:9px;letter-spacing:.12em;text-transform:uppercase;color:var(--ink-faint)}
+  .tk-stat b{font-family:"IBM Plex Mono",monospace;font-size:12.5px;font-weight:600;color:var(--ink)}
+  .tk-stat b.up{color:oklch(0.78 0.16 145)}
+  .tk-stat b.down{color:var(--red-hi)}
+
+  /* ---------- the chart toolbar ---------- */
+  .tbar{
+    position:absolute;left:0;right:0;top:0;z-index:3;
+    display:flex;align-items:center;justify-content:space-between;
+    padding:8px 10px;pointer-events:none;
+  }
+  .tbar > *{pointer-events:auto}
+  .tf{display:flex;gap:2px;background:oklch(0.06 0 0 / .8);border:1px solid var(--line);border-radius:4px;padding:2px}
+  .tf button{
+    font-family:"IBM Plex Mono",monospace;font-size:10px;color:var(--ink-faint);
+    background:transparent;border:0;border-radius:3px;padding:3px 7px;cursor:pointer;
+  }
+  .tf button[aria-pressed="true"]{background:var(--panel-2);color:var(--ink)}
+  .tbar-r{display:flex;gap:6px}
+  .chip{
+    font-family:"IBM Plex Mono",monospace;font-size:10px;color:var(--ink-faint);
+    background:oklch(0.06 0 0 / .8);border:1px solid var(--line);border-radius:4px;padding:4px 7px;
+  }
+  .chip b{color:var(--ink);font-weight:600}
+  .chip.dot{display:flex;align-items:center;gap:5px}
+  .chip.dot i{width:6px;height:6px;border-radius:50%;background:oklch(0.78 0.16 145);animation:blink 1.4s infinite}
+  @keyframes blink{50%{opacity:.25}}
+
+  /* ---------- the tape: everyone else's fills ---------- */
+  .tape{
+    position:absolute;left:0;right:0;bottom:0;z-index:3;
+    display:flex;flex-direction:column;justify-content:flex-end;gap:2px;
+    padding:0 10px 8px;pointer-events:none;
+    font-family:"IBM Plex Mono",monospace;font-size:10px;
+    mask-image:linear-gradient(180deg,transparent,#000 40%);
+  }
+  .tape div{display:flex;gap:8px;opacity:.85;animation:tapeIn 260ms var(--mk-out) both}
+  .tape .w{color:var(--ink-faint)}
+  .tape .b{color:oklch(0.78 0.16 145)}
+  .tape .s{color:var(--red-hi)}
+  .tape .a{color:var(--ink-dim);margin-left:auto}
+  @keyframes tapeIn{from{opacity:0;transform:translateY(6px)}}
+
+  /* ---------- session stats ---------- */
+  .sess{
+    display:grid;grid-template-columns:1fr 1fr;gap:6px 10px;
+    background:var(--panel-2);border:1px solid var(--line);border-radius:4px;padding:10px 11px;
+  }
+  .sess div{display:flex;flex-direction:column;gap:2px}
+  .sess span{font-family:"IBM Plex Mono",monospace;font-size:9px;letter-spacing:.12em;text-transform:uppercase;color:var(--ink-faint)}
+  .sess b{font-family:"IBM Plex Mono",monospace;font-size:13px;font-weight:600}
+  .sess b.up{color:oklch(0.78 0.16 145)}
+  .sess b.down{color:var(--red-hi)}
+
+  .fills{display:flex;flex-direction:column;gap:3px;font-family:"IBM Plex Mono",monospace;font-size:10.5px}
+  .fills div{display:flex;gap:8px;padding:3px 0;border-bottom:1px solid var(--line)}
+  .fills .b{color:oklch(0.78 0.16 145);font-weight:700}
+  .fills .s{color:var(--red-hi);font-weight:700}
+  .fills .a{margin-left:auto;color:var(--ink-dim)}
+  .fills-h{font-family:"IBM Plex Mono",monospace;font-size:9px;letter-spacing:.12em;text-transform:uppercase;color:var(--ink-faint);margin-top:4px}
+
+  .pos b.pnl{font-size:11px;margin-left:6px}
+  .pos b.pnl.up{color:oklch(0.78 0.16 145)}
+  .pos b.pnl.down{color:var(--red-hi)}
+
+  .hist{display:flex;flex-wrap:wrap;gap:5px;margin-top:auto}
+
+  .hist span{
+    font-family:"IBM Plex Mono",monospace;font-size:10.5px;
+    padding:3px 7px;border-radius:3px;
+    background:var(--panel-2);color:var(--ink-faint);
+    border:1px solid var(--line);
+  }
+
+  .hist span.hi{color:oklch(0.78 0.16 145);border-color:oklch(0.40 0.10 145)}
+  .hist span.lo{color:var(--red);border-color:oklch(0.36 0.14 27)}
+
+  .game-note{
+    font-family:"IBM Plex Mono",monospace;font-size:10.5px;
+    color:var(--ink-faint);line-height:1.5;margin:0;
+  }
+
+  @media (max-width:760px){
+    .game{grid-template-columns:1fr;max-width:460px}
+    #crashCanvas{height:400px}
+    .game-chart{min-height:400px}
+  }
+
+  /* ============================================================
+     MODALS
+     ============================================================ */
+  #lb,#asw,#vp{
+    position:fixed;inset:0;z-index:80;
+    background:oklch(0.04 0 0 / .92);
+    display:grid;place-items:center;padding:24px;
+    opacity:0;visibility:hidden;
+    transition:opacity 280ms var(--mk-out),visibility 280ms;
+  }
+
+  #lb.on,#asw.on,#vp.on{opacity:1;visibility:visible}
+
+  .sheet{
+    background:var(--panel);border:1px solid var(--line);border-radius:8px;
+    max-width:520px;width:100%;overflow:hidden;
+    transform:scale(.94);transition:transform 420ms var(--mk-out);
+  }
+
+  #lb.on .sheet,#asw.on .sheet,#vp.on .sheet{transform:none}
+
+  /* ---------- the player ---------- */
+  .vp-box{max-width:880px;background:#000}
+  .vp-stage{position:relative}
+  .vp-box video{width:100%;aspect-ratio:16/9;display:block;background:#000}
+  .vp-unmute{
+    position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);
+    font:700 15px Archivo,sans-serif;color:#fff;
+    background:var(--red);border:0;border-radius:6px;padding:12px 18px;cursor:pointer;
+    box-shadow:0 8px 30px oklch(0 0 0 / .5);
+  }
+  .vp-snd{flex:1;text-align:center}
+  .vp-snd.off{color:var(--ink-faint)}
+  .vp-body{background:var(--panel)}
+  .vp-tag{font-size:11px;letter-spacing:.14em;color:var(--red-hi);display:block;margin-bottom:6px}
+  .vp-nav{display:flex;justify-content:space-between;gap:10px;margin-top:16px}
+  .vp-btn{
+    font:600 13px Archivo,sans-serif;color:var(--ink);
+    background:var(--panel-2);border:1px solid var(--line);border-radius:4px;
+    padding:9px 14px;cursor:pointer;transition:background 140ms var(--mk-out);
+  }
+  .vp-btn:hover{background:var(--line)}
+
+  /* ---------- episode cards ---------- */
+  .card-vid{
+    width:100%;height:100%;object-fit:cover;display:block;background:var(--panel-2);
+    transition:transform 620ms var(--mk-out);
+  }
+  .card:hover .card-vid{transform:scale(1.06)}
+
+  .card-play{
+    position:absolute;inset:0;display:grid;place-items:center;
+    font-size:22px;color:#fff;
+    background:oklch(0 0 0 / .18);
+    opacity:0;transition:opacity 220ms var(--mk-out);
+  }
+  .card-play::before{
+    content:"";position:absolute;width:52px;height:52px;border-radius:50%;
+    background:oklch(0.08 0 0 / .72);border:1.5px solid oklch(1 0 0 / .55);
+  }
+  .card-play{text-indent:3px}
+  .card-snd{
+    position:absolute;right:8px;top:8px;z-index:4;
+    width:30px;height:30px;border-radius:50%;
+    display:grid;place-items:center;font-size:15px;line-height:1;
+    background:oklch(0.06 0 0 / .78);border:1px solid oklch(1 0 0 / .28);
+    color:#fff;cursor:pointer;
+    opacity:.85;transition:opacity 160ms var(--mk-out),transform 160ms var(--mk-out);
+  }
+  .card-snd:hover{opacity:1;transform:scale(1.08)}
+  .card-snd.on{background:var(--red);border-color:var(--red)}
+  .card-play{--z:1}
+  .card-play span{position:relative}
+  .card:hover .card-play{opacity:1}
+  .card.previewing .card-play{opacity:0}
+
+  .sheet img{width:100%;height:auto;display:block}
+  .sheet-body{padding:20px 22px 24px}
+  .sheet-body h3{font-size:20px;margin:0 0 8px}
+  .sheet-body p{margin:0;color:var(--ink-dim);font-size:14.5px}
+
+  .asw-box{text-align:center;padding:34px 30px}
+  .asw-box h3{font-size:26px;margin:0 0 10px}
+  .asw-box p{color:var(--ink-dim);margin:0 0 22px;font-size:14.5px}
+  .asw-box .btn{width:100%;margin-bottom:9px;justify-content:center}
+  .asw-box .btn:last-child{margin-bottom:0}
+
+  /* ============================================================
+     CONTRACT + FOOTER
+     ============================================================ */
+  .ticket{
+    background:var(--panel);border:1px solid var(--line);border-radius:7px;
+    padding:22px 24px;display:flex;gap:18px;align-items:center;flex-wrap:wrap;
+  }
+
+  .ticket .lbl{
+    font-family:"IBM Plex Mono",monospace;font-size:10.5px;
+    letter-spacing:.16em;text-transform:uppercase;color:var(--ink-faint);
+    margin:0 0 6px;
+  }
+
+  .ticket code{
+    font-family:"IBM Plex Mono",monospace;font-size:12.5px;
+    color:var(--ink-dim);overflow-wrap:anywhere;display:block;
+  }
+
+  .ticket .grow{flex:1 1 260px;min-width:0}
+
+  footer{
+    border-top:1px solid var(--line);margin-top:40px;
+    padding:34px 0 74px;color:var(--ink-faint);font-size:13px;
+  }
+
+  .links{list-style:none;display:flex;flex-wrap:wrap;gap:18px;padding:0;margin:0 0 18px}
+  .links a{color:var(--ink-dim);text-decoration:none;font-size:13px}
+  .links a:hover{color:var(--ink);text-decoration:underline}
+
+  #toast{
+    position:fixed;left:50%;bottom:24px;transform:translate(-50%,10px);
+    background:var(--ink);color:#000;font-weight:700;font-size:13px;
+    padding:11px 20px;border-radius:5px;z-index:90;
+    opacity:0;pointer-events:none;
+    transition:opacity 220ms var(--mk-out),transform 220ms var(--mk-out);
+  }
+
+  #toast.on{opacity:1;transform:translate(-50%,0)}
+
+  @media (prefers-reduced-motion:reduce){
+    html{scroll-behavior:auto}
+    .live-tag i{animation:none}
+    .rail.ten .rank{opacity:1;transform:none;animation:none}
+    .game-chart.shake{animation:none}
+  }
+</style>
+</head>
+
+<body>
+
+<div id="intro" role="presentation">
+  <div class="seq">
+    <div class="mark">
+      <h1 class="markText" data-brand>REKTFLIX</h1>
+      <span class="ribbons" aria-hidden="true"></span>
+      <span class="beams" aria-hidden="true"></span>
+      <span class="flare" aria-hidden="true"></span>
+    </div>
+  </div>
+  <p class="intro-sub" data-brand="original">A REKTFLIX Original</p>
+  <button type="button" id="introSkip">Skip intro</button>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script src="fx-kit.js" defer></script>
+
+<canvas id="bg" aria-hidden="true" style="position:fixed;inset:0;width:100%;height:100%;z-index:0;pointer-events:none"></canvas>
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <filter id="mk-grain">
+    <feTurbulence type="fractalNoise" baseFrequency="0.8" numOctaves="3" stitchTiles="stitch"/>
+    <feColorMatrix type="saturate" values="0"/>
+  </filter>
+</svg>
+
+<!-- ============ TOP BAR ============ -->
+<nav class="nav" id="nav">
+  <a class="brand" href="#top">
+    <img src="face.jpg" width="400" height="400" alt="">
+    <b data-brand>REKTFLIX</b>
+  </a>
+  <ul>
+    <li aria-current="page"><a href="#top">Home</a></li>
+    <li><a href="#series">Series</a></li>
+    <li><a href="#game">Terminal</a></li>
+    <li><a href="#list">My List</a></li>
+  </ul>
+  <div class="nav-right">
+    <img class="avatar" src="face.jpg" width="400" height="400" alt="Profile: the investor">
+  </div>
+</nav>
+
+<main style="position:relative;z-index:1" id="top">
+
+  <!-- ============ BILLBOARD ============ -->
+  <header class="bb">
+    <div class="bb-art">
+      <canvas id="scene3d" aria-label="A 3D basement: the investor at his desk facing a falling chart"></canvas>
+      <div class="bb-fallback">
+        <img src="hero.jpg" width="1600" height="791" fetchpriority="high" alt="A stick figure with a golden rounded-square smiling head sits at a computer desk in a messy basement, facing a monitor showing a falling red chart.">
+      </div>
+    </div>
+    <div class="bb-scrim" aria-hidden="true"></div>
+
+    <div class="playstage" id="playstage">
+      <p class="presents"><span data-brand>REKTFLIX</span> presents</p>
+      <button type="button" class="play3d" id="play3d" aria-label="Play">
+        <span class="glow" aria-hidden="true"></span>
+        <i style="--d:8" aria-hidden="true"></i>
+        <i style="--d:7" aria-hidden="true"></i>
+        <i style="--d:6" aria-hidden="true"></i>
+        <i style="--d:5" aria-hidden="true"></i>
+        <i style="--d:4" aria-hidden="true"></i>
+        <i style="--d:3" aria-hidden="true"></i>
+        <i style="--d:2" aria-hidden="true"></i>
+        <i style="--d:1" aria-hidden="true"></i>
+        <span class="face" aria-hidden="true"></span>
+        <span class="play-label">Play</span>
+      </button>
+    </div>
+
+    <div class="bb-in pad">
+      <p class="bb-badge" style="--i:0"><b data-brand>REKTFLIX</b> &middot; Limited Series</p>
+      <h1 style="--i:1">The <q>Investor</q></h1>
+      <p class="bb-meta" style="--i:2">
+        <b>2026</b> <b>1 Season</b> <b>6 Episodes</b> <b>18+</b>
+        <span>97% did not finish it</span>
+      </p>
+      <p class="bb-syn" style="--i:3">One man. One basement. One position he refuses to close. Filmed over eleven months by a crew who were, at several points, genuinely worried.</p>
+      <div class="bb-actions" style="--i:4">
+        <button type="button" class="btn play" id="playBtn">&#9654;&nbsp; Play</button>
+        <button type="button" class="btn" id="infoBtn">&#9432;&nbsp; More Info</button>
+      </div>
+    </div>
+  </header>
+
+  <div class="pad">
+
+    <!-- ============ NEWS TICKER ============ -->
+    <div class="wire" aria-hidden="true">
+      <span class="wire-tag">Breaking</span>
+      <div class="wire-track"><div class="wire-run" id="wireRun"></div></div>
+    </div>
+
+    <!-- ============ CONTINUE WATCHING ============ -->
+    <section class="row" id="series">
+      <div class="row-head">
+        <h2>Continue Watching for The Investor</h2>
+        <span>drag to scroll</span>
+      </div>
+      <div class="rail" id="railEps"></div>
+    </section>
+
+    <!-- ============ THE GAME ============ -->
+    <section class="row" id="game">
+      <div class="row-head">
+        <h2>Terminal</h2>
+        <span><button type="button" class="snd-btn" id="sndBtn" aria-pressed="false">&#128266; sound on</button></span>
+      </div>
+
+      <div class="game">
+        <div class="tk">
+          <div class="tk-pair"><img src="face.jpg" width="400" height="400" alt=""><b>$INVSTR</b><span>/ SOL</span><i class="tk-chain">SOL</i></div>
+          <div class="tk-stat"><span>Price</span><b class="mono" id="tkPrice">$0.000420</b></div>
+          <div class="tk-stat"><span>24h</span><b class="mono up" id="tkChg">+0.0%</b></div>
+          <div class="tk-stat"><span>MC</span><b class="mono" id="tkMc">$42.0K</b></div>
+          <div class="tk-stat"><span>Liq</span><b class="mono" id="tkLiq">$8.1K</b></div>
+          <div class="tk-stat"><span>Vol 24h</span><b class="mono" id="tkVol">$0</b></div>
+          <div class="tk-stat"><span>Holders</span><b class="mono" id="tkHold">1</b></div>
+        </div>
+
+        <div class="game-chart">
+          <div class="tbar">
+            <div class="tf"><button type="button" aria-pressed="true">1s</button><button type="button">5s</button><button type="button">15s</button><button type="button">1m</button></div>
+            <div class="tbar-r"><span class="chip">Slippage <b>25%</b></span><span class="chip">MEV <b>off</b></span><span class="chip dot"><i></i> live</span></div>
+          </div>
+          <canvas id="crashCanvas"></canvas>
+          <div class="game-mult mono" id="mult">1.00&times;</div>
+          <div class="game-status" id="gstatus">press buy to enter</div>
+          <div class="rugged" id="rugged"><div><b>YOU GOT RUGGED</b><small id="rugCould"></small></div></div>
+          <div class="game-flash" id="gflash" aria-hidden="true"></div>
+          <div class="tape" id="tape" aria-live="off"></div>
+        </div>
+
+        <div class="game-side">
+          <div class="bal">
+            <span>Balance</span>
+            <b class="mono" id="bal">$1,000</b>
+          </div>
+
+          <div class="stake" id="stake">
+            <button type="button" data-bet="10">$10</button>
+            <button type="button" data-bet="50" aria-pressed="true">$50</button>
+            <button type="button" data-bet="250">$250</button>
+            <button type="button" data-bet="all">All</button>
+          </div>
+
+          <button type="button" class="game-btn buy" id="buyBtn">BUY</button>
+
+          <div class="pos" id="pos" hidden>
+            <span>In position</span>
+            <span><b class="mono" id="posVal">$0</b><b class="mono pnl" id="posPnl"></b></span>
+          </div>
+
+          <div class="sells" id="sells">
+            <button type="button" class="sellpct" data-pct="10" disabled>10%</button>
+            <button type="button" class="sellpct" data-pct="25" disabled>25%</button>
+            <button type="button" class="sellpct" data-pct="50" disabled>50%</button>
+            <button type="button" class="sellpct sell-all" data-pct="100" disabled>SELL ALL</button>
+          </div>
+
+          <p class="game-note" id="gnote">He has never once pressed sell. You are already ahead of him.</p>
+
+          <div class="sess">
+            <div><span>Realized PnL</span><b class="mono" id="stPnl">$0</b></div>
+            <div><span>Win rate</span><b class="mono" id="stWin">&ndash;</b></div>
+            <div><span>Trades</span><b class="mono" id="stN">0</b></div>
+            <div><span>Best exit</span><b class="mono" id="stBest">&ndash;</b></div>
+          </div>
+          <div class="fills-h">Your fills</div>
+          <div class="fills" id="fills"></div>
+
+          <div class="hist" id="hist"></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ TOP 10 ============ -->
+    <section class="row">
+      <div class="row-head">
+        <h2>Top 6 Losses in This House Today</h2>
+        <span>verified by nobody</span>
+      </div>
+      <div class="rail ten" id="railTen"></div>
+    </section>
+
+    <!-- ============ THE ARCHIVE ============ -->
+    <section class="row" id="list">
+      <div class="row-head">
+        <h2>My List</h2>
+        <span>photographic evidence</span>
+      </div>
+      <div class="rail" id="railMemes"></div>
+    </section>
+
+    <!-- ============ BONUS FEATURE ============ -->
+
+    <section class="row">
+      <div class="ticket">
+        <div class="grow">
+          <p class="lbl">Contract address</p>
+          <code id="ca" data-cfg="contract">0x0000000000000000000000000000000000000000</code>
+        </div>
+        <button type="button" class="btn red mk-tap" id="copy">Copy</button>
+      </div>
+    </section>
+
+  </div>
+
+  <footer class="pad">
+    <ul class="links" id="links">
+      <li data-link="twitter"><a href="#">Twitter</a></li>
+      <li data-link="telegram"><a href="#">Telegram</a></li>
+      <li data-link="chart"><a href="#">Chart</a></li>
+    </ul>
+    <p><span data-brand>REKTFLIX</span> is not a streaming service. He is not a financial advisor. He is not an advisor. He is a stick figure in a basement.</p>
+  </footer>
+
+</main>
+
+<div id="lb" role="dialog" aria-modal="true" aria-label="Details">
+  <div class="sheet">
+    <img id="lbImg" src="" alt="">
+    <div class="sheet-body">
+      <h3 id="lbTitle"></h3>
+      <p id="lbCap"></p>
+    </div>
+  </div>
+</div>
+
+<div id="vp" role="dialog" aria-modal="true" aria-label="Now playing">
+  <div class="sheet vp-box">
+    <div class="vp-stage">
+      <video id="vpVid" controls playsinline preload="metadata"></video>
+      <button type="button" class="vp-unmute" id="vpUnmute" hidden>&#128266; Tap to unmute</button>
+    </div>
+    <div class="sheet-body vp-body">
+      <span class="vp-tag mono" id="vpTag"></span>
+      <h3 id="vpTitle"></h3>
+      <p id="vpCap"></p>
+      <div class="vp-nav">
+        <button type="button" class="vp-btn" id="vpPrev">&#8249; Prev</button>
+        <button type="button" class="vp-btn vp-snd" id="vpSnd">&#128266; Sound on</button>
+        <button type="button" class="vp-btn" id="vpNext">Next &#8250;</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div id="asw" role="dialog" aria-modal="true" aria-label="Are you still watching?">
+  <div class="sheet asw-box">
+    <h3>Are you still watching?</h3>
+    <p>You have been on this page for a while. So has he. He has been here since March.</p>
+    <button type="button" class="btn play" id="aswYes">Continue watching</button>
+    <button type="button" class="btn ghost" id="aswNo">I should go outside</button>
+  </div>
+</div>
+
+<div id="toast" role="status" aria-live="polite">copied</div>
+
+<script>
+
+/* ============================================================
+   OPENING TITLE SEQUENCE
+   Runs on every load because that is the joke. It is 3.2s, it is
+   skippable, and it removes itself from the DOM afterwards so it
+   can never trap anyone behind it.
+   ============================================================ */
+(function(){
+  var intro = document.getElementById("intro");
+  if(!intro) return;
+
+  var reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+  function end(){
+    if(!intro || intro.dataset.gone) return;
+    intro.dataset.gone = "1";
+    intro.classList.add("done");
+    document.documentElement.classList.remove("intro-lock");
+    document.body.classList.remove("intro-lock");
+    setTimeout(function(){ if(intro.parentNode) intro.parentNode.removeChild(intro); }, 1450);
+  }
+
+  if(reduced){ end(); return; }
+
+  // The title sequence is held until Play is pressed, so the first
+  // thing on screen is the set and the button, not a wall of black.
+  intro.style.display = "none";
+  window.__playIntro = function(after){
+    intro.style.display = "grid";
+    document.documentElement.classList.add("intro-lock");
+    document.body.classList.add("intro-lock");
+
+    // the ribbons: a spectrum from deep red through orange, magenta,
+    // violet and blue, mirrored from the centre out
+    var rb = intro.querySelector(".ribbons");
+    if(rb && !rb.children.length){
+      var N = window.innerWidth < 640 ? 42 : 88;
+      var hues = [27, 35, 45, 20, 350, 320, 300, 280, 260, 240];
+      for(var i=0;i<N;i++){
+        var s = document.createElement("i");
+        var t = Math.abs(i - (N-1)/2) / ((N-1)/2);            // 0 centre .. 1 edge
+        var hue = hues[Math.min(hues.length-1, Math.floor(t * hues.length))];
+        s.style.setProperty("--c", "oklch(" + (0.62 + t*0.1).toFixed(2) + " 0.24 " + hue + ")");
+        s.style.setProperty("--d", Math.round(t * 40 + Math.random()*6));
+        s.style.setProperty("--k", ((i - (N-1)/2) / (N/2) * 6).toFixed(1));
+        rb.appendChild(s);
+      }
+    }
+    var seq = intro.querySelector(".seq");
+    if(seq) seq.classList.add("dive");
+
+    setTimeout(function(){ end(); if(after) after(); }, 3600);
+  };
+  return;
+
+  // the beams sit inside the letterforms; they rise from the centre out
+  var beams = intro.querySelector(".beams");
+  var n = window.innerWidth < 640 ? 17 : 29;
+  for(var i=0;i<n;i++){
+    var b=document.createElement("i");
+    b.style.setProperty("--b", Math.abs(i-(n-1)/2).toFixed(0));
+    beams.appendChild(b);
+  }
+
+  document.getElementById("introSkip").addEventListener("click", end);
+  document.addEventListener("keydown", function(e){
+    if(e.key==="Escape"||e.key===" ") end();
+  });
+
+  // the sequence, and a hard backstop in case a timer is throttled
+  setTimeout(end, 3200);
+  window.addEventListener("load", function(){ setTimeout(end, 3400); });
+})();
+
+
+/* ============================================================
+   THE 3D SET
+   Everything here is built from primitives at runtime: no .glb,
+   no textures over the wire. The monitor is a live 2D canvas
+   painted into the scene as a texture, so the chart on the screen
+   is the same falling line as the one in the Live row.
+
+   If WebGL is missing or the context is lost, the flat artwork
+   underneath is what you see and nothing else changes.
+   ============================================================ */
+(function(){
+  var canvas = document.getElementById("scene3d");
+  if(!canvas || typeof THREE === "undefined") return;
+
+  var reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  var renderer;
+  try{
+    renderer = new THREE.WebGLRenderer({canvas:canvas, antialias:true, alpha:true});
+  }catch(e){ return; }
+
+  document.querySelector(".bb").classList.add("has3d");
+
+  renderer.setPixelRatio(Math.min(window.devicePixelRatio, 1.8));
+  renderer.shadowMap.enabled = true;
+  renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+  renderer.outputEncoding = THREE.sRGBEncoding;
+
+  var scene = new THREE.Scene();
+  scene.fog = new THREE.Fog(0x0a0a0a, 8, 22);
+
+  var CAM = {x:-5.5, y:3.8, z:-2.9};   // front-left three-quarter: his face and the screen both read
+  var camera = new THREE.PerspectiveCamera(42, 2, 0.1, 100);
+  camera.position.set(CAM.x, CAM.y, CAM.z);
+
+  /* ---------- materials ---------- */
+  var GOLD  = new THREE.MeshStandardMaterial({color:0xe0a53c, roughness:0.38, metalness:0.22, emissive:0x5a3a10, emissiveIntensity:1.15});
+  var INK   = new THREE.MeshStandardMaterial({color:0x141414, roughness:0.72, metalness:0.05});
+  var WOOD  = new THREE.MeshStandardMaterial({color:0x2a2118, roughness:0.9});
+  var WALL  = new THREE.MeshStandardMaterial({color:0x0f0d0a, roughness:1});
+  var METAL = new THREE.MeshStandardMaterial({color:0x2b2b2e, roughness:0.5, metalness:0.6});
+  var CAN   = new THREE.MeshStandardMaterial({color:0x9a2f24, roughness:0.35, metalness:0.5});
+
+  function box(w,hh,d,mat,x,y,z,parent){
+    var m=new THREE.Mesh(new THREE.BoxGeometry(w,hh,d),mat);
+    m.position.set(x,y,z); m.castShadow=true; m.receiveShadow=true;
+    (parent||scene).add(m); return m;
+  }
+  function cyl(rt,rb,hh,mat,x,y,z,parent){
+    var m=new THREE.Mesh(new THREE.CylinderGeometry(rt,rb,hh,16),mat);
+    m.position.set(x,y,z); m.castShadow=true; m.receiveShadow=true;
+    (parent||scene).add(m); return m;
+  }
+
+  /* ---------- the room ---------- */
+  var floor=new THREE.Mesh(new THREE.PlaneGeometry(40,40),
+    new THREE.MeshStandardMaterial({color:0x1a1712, roughness:0.95}));
+  floor.rotation.x=-Math.PI/2; floor.receiveShadow=true; scene.add(floor);
+
+  box(24,10,0.4,WALL,0,5,-5);          // back wall
+  box(0.4,10,20,WALL,-8,5,4);          // side wall
+
+  // the little basement window, high on the wall
+  var win=box(2.6,1.3,0.2,new THREE.MeshStandardMaterial({
+    color:0x9fb6c9, emissive:0x22374a, emissiveIntensity:0.45, roughness:0.6
+  }),3.4,6.4,-4.75);
+
+  // the stairs going up out of frame
+  for(var s=0;s<7;s++) box(3.2,0.28,0.9,WOOD,-5.2,0.3+s*0.62,-3.4+s*0.75);
+
+  /* ---------- the desk ---------- */
+  box(6.4,0.22,2.6,WOOD,0.4,2.0,-2.2);
+  cyl(0.09,0.09,2,METAL,-2.4,1.0,-1.2);
+  cyl(0.09,0.09,2,METAL,3.1,1.0,-1.2);
+  cyl(0.09,0.09,2,METAL,-2.4,1.0,-3.1);
+  cyl(0.09,0.09,2,METAL,3.1,1.0,-3.1);
+
+  /* ---------- the monitor, with a live screen ---------- */
+  var screenCanvas=document.createElement("canvas");
+  screenCanvas.width=512; screenCanvas.height=320;
+  var sctx=screenCanvas.getContext("2d");
+  var screenTex=new THREE.CanvasTexture(screenCanvas);
+
+  var monitor=new THREE.Group(); monitor.position.set(0.9,3.05,-3.2); scene.add(monitor);
+  box(4.3,2.7,0.16,INK,0,0,0,monitor);
+  var screen=new THREE.Mesh(new THREE.PlaneGeometry(4.0,2.42),
+    new THREE.MeshBasicMaterial({map:screenTex}));
+  screen.position.z=0.09; monitor.add(screen);
+  box(0.5,0.5,0.4,INK,0,-1.6,0,monitor);
+  box(1.7,0.12,0.7,INK,0,-1.85,0,monitor);
+
+  // the monitor is the main light source in the room
+  var screenLight=new THREE.PointLight(0xff4a3a,2.4,16,2);
+  screenLight.position.set(0.9,3.0,-2.3); scene.add(screenLight);
+
+  // cursor state on the monitor: where it is, what it is hovering, and
+  // the last click flash
+  var cur = {x:380, y:230, tx:380, ty:230, hover:0, flash:0, flashKind:"", lastPts:null, fillTag:null, fillT:0};
+  var BTN = [{x:300,y:6,w:66,h:22,label:"BUY",col:"#26c46a"},{x:372,y:6,w:66,h:22,label:"SELL",col:"#e0432f"}];
+
+  function paintScreen(pts){
+    if(pts) cur.lastPts = pts; else pts = cur.lastPts;
+    if(!pts) return;
+    sctx.fillStyle="#0a0b0d"; sctx.fillRect(0,0,512,320);
+
+    // proper candles: each point is a close, the open is the previous
+    // close, and the wicks are remembered per candle so they stay put
+    if(!cur.wicks) cur.wicks = {};
+    var L = 12, R = 462, T = 34, B = 236;            // chart box; price axis on the right, volume below
+    var min=Math.min.apply(null,pts), max=Math.max.apply(null,pts), r=(max-min)||1;
+    min -= r*0.08; max += r*0.08; r = max - min;
+    function Y(v){ return B - ((v-min)/r)*(B-T); }
+
+    // grid + price axis
+    sctx.strokeStyle="rgba(255,255,255,0.07)"; sctx.lineWidth=1;
+    sctx.fillStyle="rgba(255,255,255,0.45)"; sctx.font="10px monospace"; sctx.textAlign="left";
+    for(var g=0;g<=4;g++){
+      var gy = T + (B-T)*g/4, gv = max - r*g/4;
+      sctx.beginPath(); sctx.moveTo(L,gy); sctx.lineTo(R,gy); sctx.stroke();
+      sctx.fillText((gv/100*0.00042).toFixed(6), R+4, gy+3);
+    }
+    for(var gx=0;gx<6;gx++){ var xx = L + (R-L)*gx/5; sctx.beginPath(); sctx.moveTo(xx,T); sctx.lineTo(xx,B); sctx.stroke(); }
+
+    var w=(R-L)/pts.length;
+    for(var i=0;i<pts.length;i++){
+      var o = i ? pts[i-1] : pts[i], c = pts[i];
+      var key = i + ":" + Math.round(c*100);
+      if(!cur.wicks[key]) cur.wicks[key] = {u: Math.random()*r*0.06, d: Math.random()*r*0.06};
+      var wk = cur.wicks[key], hi = Math.max(o,c)+wk.u, lo = Math.min(o,c)-wk.d;
+      var up = c >= o, x = L + i*w + w/2;
+      sctx.strokeStyle = up ? "#1b8f4d" : "#a32b1c"; sctx.lineWidth=1.2;
+      sctx.beginPath(); sctx.moveTo(x, Y(hi)); sctx.lineTo(x, Y(lo)); sctx.stroke();
+      sctx.fillStyle = up ? "#26c46a" : "#e0432f";
+      var top = Y(Math.max(o,c)), hh = Math.max(Math.abs(Y(c)-Y(o)), 1.5);
+      sctx.fillRect(x - w*0.32, top, w*0.64, hh);
+      // volume
+      var vol = 6 + Math.abs(c-o)/r*160 + ((i*7)%9);
+      sctx.fillStyle = up ? "rgba(38,196,106,0.35)" : "rgba(224,67,47,0.35)";
+      sctx.fillRect(x - w*0.32, 300 - Math.min(vol, 52), w*0.64, Math.min(vol, 52));
+    }
+    // last price line + tag
+    var lastP = pts[pts.length-1], ly = Y(lastP);
+    sctx.setLineDash([3,3]); sctx.strokeStyle="rgba(255,255,255,0.35)";
+    sctx.beginPath(); sctx.moveTo(L,ly); sctx.lineTo(R,ly); sctx.stroke(); sctx.setLineDash([]);
+    sctx.fillStyle = lastP >= pts[0] ? "#26c46a" : "#e0432f"; sctx.fillRect(R+1, ly-8, 50, 16);
+    sctx.fillStyle="#000"; sctx.font="bold 10px monospace"; sctx.fillText((lastP/100*0.00042).toFixed(6), R+4, ly+4);
+    // time axis
+    sctx.fillStyle="rgba(255,255,255,0.35)"; sctx.font="9px monospace";
+    var labs=["1m","45s","30s","15s","now"]; for(var tl=0;tl<5;tl++) sctx.fillText(labs[tl], L + (R-L)*tl/4 - (tl?8:0), 312);
+
+    // ticker header, the two buttons, a fill toast, and the cursor
+    sctx.fillStyle="rgba(255,255,255,0.55)"; sctx.font="bold 15px monospace";
+    sctx.fillText("$INVSTR / SOL", 12, 22);
+    sctx.fillStyle="#e0432f"; sctx.font="13px monospace";
+    var last = pts[pts.length-1], first = pts[0];
+    sctx.fillText(((last-first)/Math.max(first,1)*100).toFixed(1) + "%", 140, 22);
+
+    for(var b=0;b<BTN.length;b++){
+      var B=BTN[b], hot = cur.hover === b+1;
+      sctx.fillStyle = hot ? B.col : "rgba(255,255,255,0.10)";
+      sctx.fillRect(B.x, B.y, B.w, B.h);
+      sctx.fillStyle = hot ? "#000" : "rgba(255,255,255,0.7)";
+      sctx.font="bold 12px monospace";
+      sctx.fillText(B.label, B.x + (B.label==="BUY"?16:10), B.y + 16);
+    }
+    if(cur.flash > 0){
+      sctx.fillStyle = cur.flashKind==="BUY" ? "rgba(38,196,106,"+(cur.flash*0.35)+")" : "rgba(224,67,47,"+(cur.flash*0.35)+")";
+      sctx.fillRect(0,0,512,320);
+    }
+    if(cur.fillT > 0 && cur.fillTag){
+      sctx.fillStyle="rgba(0,0,0,0.75)"; sctx.fillRect(300,40,200,30);
+      sctx.fillStyle = cur.fillTag.indexOf("BOUGHT")===0 ? "#26c46a" : "#ff6a5a";
+      sctx.font="bold 13px monospace"; sctx.fillText(cur.fillTag, 310, 60);
+    }
+    // the arrow
+    sctx.save(); sctx.translate(cur.x, cur.y);
+    sctx.fillStyle="#fff"; sctx.strokeStyle="#000"; sctx.lineWidth=2;
+    sctx.beginPath(); sctx.moveTo(0,0); sctx.lineTo(0,17); sctx.lineTo(4.5,13); sctx.lineTo(8,20); sctx.lineTo(11,18.5); sctx.lineTo(7.5,12); sctx.lineTo(13,12); sctx.closePath();
+    sctx.fill(); sctx.stroke(); sctx.restore();
+
+    screenTex.needsUpdate=true;
+  }
+
+  // seeded with a decline; the Live row updates it from the real series
+  var seed=[]; for(var q=0;q<40;q++) seed.push(100-q*1.6+Math.random()*9);
+  paintScreen(seed);
+  window.__paintScreen = paintScreen;
+
+  /* ---------- keyboard, mousepad, mouse ---------- */
+  box(1.5,0.05,0.5,new THREE.MeshStandardMaterial({color:0x1c1c1e,roughness:0.8}),0.2,2.14,-1.45);
+  for(var kx=0;kx<9;kx++) for(var kz=0;kz<3;kz++)
+    box(0.12,0.03,0.12,new THREE.MeshStandardMaterial({color:0x2e2e32,roughness:0.6}),-0.4+kx*0.15,2.175,-1.6+kz*0.15);
+  var pad=box(0.95,0.02,0.75,new THREE.MeshStandardMaterial({color:0x151517,roughness:1}),1.75,2.12,-1.35);
+  var mouse=new THREE.Group(); mouse.position.set(1.75,2.13,-1.35); scene.add(mouse);
+  var mouseBody=new THREE.Mesh(new THREE.SphereGeometry(0.13,16,12),
+    new THREE.MeshStandardMaterial({color:0x2a2a2e,roughness:0.45,metalness:0.2}));
+  mouseBody.scale.set(1,0.55,1.5); mouseBody.position.y=0.05; mouse.add(mouseBody);
+  var mouseLed=new THREE.Mesh(new THREE.BoxGeometry(0.03,0.01,0.06),
+    new THREE.MeshStandardMaterial({color:0x26c46a,emissive:0x26c46a,emissiveIntensity:2}));
+  mouseLed.position.set(0,0.11,-0.05); mouse.add(mouseLed);
+  var mouseHome={x:1.75,z:-1.35}, mouseT={x:1.75,z:-1.35}, nextMove=1.2, nextClick=2.0, pressT=0;
+
+  /* ---------- the back wall ---------- */
+  box(24,10,0.4,WALL,0,5,2.8);           // the wall behind him, now that the camera faces it
+  box(0.4,10,20,WALL,6.5,5,0);           // and the one on his right
+  var PAPER=new THREE.MeshStandardMaterial({color:0xd9c9a3,roughness:0.95});
+  var POSTER=new THREE.MeshStandardMaterial({color:0x7a1e18,roughness:0.9});
+  // a poster, slightly crooked
+  var poster=box(1.6,2.2,0.03,POSTER,3.2,4.4,2.55); poster.rotation.z=-0.05;
+  box(1.2,0.5,0.035,new THREE.MeshStandardMaterial({color:0xe0a53c,roughness:0.9}),3.2,4.9,2.57).rotation.z=-0.05;
+  box(1.2,0.9,0.035,new THREE.MeshStandardMaterial({color:0x111111,roughness:0.9}),3.2,4.0,2.57).rotation.z=-0.05;
+  box(0.9,0.04,0.04,new THREE.MeshStandardMaterial({color:0x26c46a,emissive:0x26c46a,emissiveIntensity:0.6}),3.2,4.0,2.6).rotation.z=0.35;
+  // a shelf with cans on it
+  box(2.4,0.08,0.5,WOOD,-1.0,4.6,2.45);
+  for(var sc=0;sc<5;sc++) cyl(0.12,0.12,0.34,CAN,-1.9+sc*0.45,4.81,2.45);
+  // a wall clock, stuck at 3 something
+  cyl(0.38,0.38,0.06,PAPER,0.9,5.3,2.55).rotation.x=Math.PI/2;
+  box(0.03,0.28,0.02,INK,0.9,5.42,2.6); box(0.22,0.03,0.02,INK,1.0,5.3,2.6);
+  // a pizza box on the floor by the chair
+  box(1.1,0.08,1.1,PAPER,2.4,0.05,1.3).rotation.y=0.4;
+
+  /* ---------- the chair ---------- */
+  var chair=new THREE.Group(); chair.position.set(0.6,0,0.3); scene.add(chair);
+  box(1.5,0.16,1.4,INK,0,1.25,0,chair);
+  box(1.5,1.7,0.16,INK,0,2.1,0.62,chair);
+  cyl(0.11,0.11,1.2,METAL,0,0.6,0,chair);
+  cyl(0.62,0.62,0.1,METAL,0,0.06,0,chair);
+
+  /* ---------- the investor ---------- */
+  var guy=new THREE.Group(); guy.position.set(0.6,0,0.05); scene.add(guy);
+
+  // square head with the two dots and the smile
+  var head=(function(){
+    var w=1.15, hh=1.05, r=0.22;
+    var s=new THREE.Shape();
+    s.moveTo(-w/2+r,-hh/2); s.lineTo(w/2-r,-hh/2); s.quadraticCurveTo(w/2,-hh/2,w/2,-hh/2+r);
+    s.lineTo(w/2,hh/2-r); s.quadraticCurveTo(w/2,hh/2,w/2-r,hh/2);
+    s.lineTo(-w/2+r,hh/2); s.quadraticCurveTo(-w/2,hh/2,-w/2,hh/2-r);
+    s.lineTo(-w/2,-hh/2+r); s.quadraticCurveTo(-w/2,-hh/2,-w/2+r,-hh/2);
+    var g=new THREE.ExtrudeGeometry(s,{depth:0.50,bevelEnabled:true,bevelThickness:0.11,bevelSize:0.10,bevelSegments:5,curveSegments:10});
+    g.center();
+    var m=new THREE.Mesh(g,GOLD); m.position.set(0,3.35,0); m.castShadow=true; m.receiveShadow=true;
+    guy.add(m); return m;
+  })();
+  var eyeG=new THREE.SphereGeometry(0.085,14,14);
+  var eyeM=new THREE.MeshStandardMaterial({color:0x0d0d0d,roughness:0.4});
+  var eL=new THREE.Mesh(eyeG,eyeM); eL.position.set(-0.24,3.45,-0.42); guy.add(eL);
+  var eR=new THREE.Mesh(eyeG,eyeM); eR.position.set( 0.24,3.45,-0.42); guy.add(eR);
+  var smile=new THREE.Mesh(new THREE.TorusGeometry(0.26,0.035,10,26,Math.PI),eyeM);
+  smile.position.set(0,3.18,-0.42); smile.rotation.z=Math.PI; guy.add(smile);
+
+  // stick body. The torso is its own group pivoting at the hips, so a
+  // lean or a slump bends him at the waist instead of tipping the whole
+  // figure over. The head rides on the torso.
+  var HIP_Y = 1.6;
+  var torso = new THREE.Group(); torso.position.set(0, HIP_Y, 0); guy.add(torso);
+  cyl(0.07,0.07,1.25,INK,0,2.2-HIP_Y,0,torso);                 // spine
+  torso.add(head); head.position.y = 3.35 - HIP_Y;
+  torso.add(eL); eL.position.y = 3.45 - HIP_Y;
+  torso.add(eR); eR.position.y = 3.45 - HIP_Y;
+  torso.add(smile); smile.position.y = 3.18 - HIP_Y;
+  var HEAD_Y = 3.35 - HIP_Y;
+
+  // both arms hang from shoulder pivots and carry a hand at the end
+  var ARM_LEN = 1.15;
+  function makeArm(x){
+    var g = new THREE.Group(); g.position.set(x, 2.72 - HIP_Y, -0.05); torso.add(g);
+    var mesh = cyl(0.055,0.055,ARM_LEN,INK,0,-ARM_LEN/2,0,g);
+    var hd = new THREE.Mesh(new THREE.SphereGeometry(0.1,12,10), INK);
+    hd.position.set(0,-ARM_LEN,0); g.add(hd);
+    return {g:g, mesh:mesh, hand:hd};
+  }
+  var armRig = makeArm(0.42), armLrig = makeArm(-0.42);
+  var armR = armRig.g, armRMesh = armRig.mesh, hand = armRig.hand;
+  var armL = armLrig.g, armLMesh = armLrig.mesh, handL = armLrig.hand;
+  var _shoulder = new THREE.Vector3(), _mouseW = new THREE.Vector3(), _dir = new THREE.Vector3(), _down = new THREE.Vector3(0,-1,0), _q = new THREE.Quaternion();
+  var _keyW = new THREE.Vector3(), _canW = new THREE.Vector3(), _faceW = new THREE.Vector3();
+
+  // aim an arm pivot from its shoulder at a world point, stretching the
+  // forearm so the hand lands exactly there
+  function aimArm(rig, worldPt, press){
+    rig.g.getWorldPosition(_shoulder);
+    _dir.copy(worldPt).sub(_shoulder);
+    var reach = Math.max(0.5, _dir.length()); _dir.normalize();
+    _dir.applyQuaternion(torso.getWorldQuaternion(_q).invert());
+    rig.g.quaternion.setFromUnitVectors(_down, _dir);
+    rig.mesh.scale.y = reach / ARM_LEN; rig.mesh.position.y = -reach/2;
+    rig.hand.position.y = -reach + 0.04 - (press ? 0.02 : 0);
+  }
+
+  var legL=cyl(0.06,0.06,1.2,INK,-0.22,1.05,0.35,guy); legL.rotation.x=0.85;
+  var legR=cyl(0.06,0.06,1.2,INK, 0.22,1.05,0.35,guy); legR.rotation.x=0.85;
+
+  // the can he drinks from sits on the desk by the keyboard; when he
+  // sips, the left hand goes to it and the can travels with the hand
+  var sipCan = cyl(0.13,0.13,0.36,CAN,-0.55,2.29,-1.15);
+  var sipHome = sipCan.position.clone();
+  var KEY_HOME = new THREE.Vector3(0.05, 2.22, -1.42);   // where the left hand types
+
+  /* ---------- the debris ---------- */
+  for(var c=0;c<7;c++){
+    var can=cyl(0.13,0.13,0.36,CAN,
+      -1.6+Math.random()*4.6, 0.18, 0.9+Math.random()*2.2);
+    can.rotation.z=Math.random()<0.5?Math.PI/2:0;
+    if(can.rotation.z) can.position.y=0.13;
+  }
+  for(var n=0;n<4;n++) cyl(0.24,0.22,0.3,new THREE.MeshStandardMaterial({color:0xd8cbb0,roughness:0.9}),
+    3.6, 0.16+n*0.3, -1.2);
+
+  // the dying plant
+  cyl(0.28,0.2,0.42,new THREE.MeshStandardMaterial({color:0x4a3524,roughness:1}),-3.4,0.21,-1.6);
+  for(var l=0;l<5;l++){
+    var leaf=box(0.06,0.5,0.16,new THREE.MeshStandardMaterial({color:0x3d4a2a,roughness:1}),
+      -3.4+(Math.random()-0.5)*0.4, 0.7+Math.random()*0.2, -1.6+(Math.random()-0.5)*0.4);
+    leaf.rotation.set((Math.random()-0.5)*1.1,Math.random()*3,(Math.random()-0.5)*1.1);
+  }
+
+  /* ---------- lights ---------- */
+  scene.add(new THREE.AmbientLight(0x5c6070, 1.05));
+
+  var bulb=new THREE.PointLight(0xffd9a0, 2.4, 26, 2);
+  bulb.position.set(-1.2,6.2,0.5);
+  bulb.castShadow=true;
+  bulb.shadow.mapSize.width=1024; bulb.shadow.mapSize.height=1024;
+  bulb.shadow.bias=-0.0012;
+  scene.add(bulb);
+  cyl(0.02,0.02,1.6,INK,-1.2,7.1,0.5);
+  var glass=new THREE.Mesh(new THREE.SphereGeometry(0.17,14,14),
+    new THREE.MeshStandardMaterial({color:0xffe6b8,emissive:0xffc46b,emissiveIntensity:1.6}));
+  glass.position.set(-1.2,6.2,0.5); scene.add(glass);
+
+  // a cool rim so his silhouette reads against the dark room
+  var rim=new THREE.DirectionalLight(0x8fb0ff, 1.15);
+  rim.position.set(-5,5,7); scene.add(rim);
+
+  // he is the subject; this keeps his head off the wall tonally
+  var subject=new THREE.PointLight(0xffe0a8, 1.5, 7, 2);
+  subject.position.set(2.0, 3.9, 2.0); scene.add(subject);
+
+  /* ---------- dust ----------
+     A few hundred motes drifting through the bulb light. Cheap - one
+     Points object - and it is what makes a room read as air rather
+     than a render. */
+  var DUST_N = 260;
+  var dustPos = new Float32Array(DUST_N * 3);
+  var dustVel = new Float32Array(DUST_N);
+  for(var di=0; di<DUST_N; di++){
+    dustPos[di*3]   = -4.5 + Math.random()*8.5;
+    dustPos[di*3+1] =  0.4 + Math.random()*6.4;
+    dustPos[di*3+2] = -4.0 + Math.random()*6.5;
+    dustVel[di] = 0.05 + Math.random()*0.12;
+  }
+  var dustGeo = new THREE.BufferGeometry();
+  dustGeo.setAttribute("position", new THREE.BufferAttribute(dustPos, 3));
+  var dust = new THREE.Points(dustGeo, new THREE.PointsMaterial({
+    color:0xffe2b0, size:0.045, transparent:true, opacity:0.5,
+    depthWrite:false, sizeAttenuation:true
+  }));
+  scene.add(dust);
+
+  var key=new THREE.DirectionalLight(0xfff0d0, 0.75);
+  key.position.set(6,8,6); scene.add(key);
+
+  /* ---------- camera work ---------- */
+  var target=new THREE.Vector3(0.9,2.9,-0.4);
+  var px=0, py=0, tx=0, ty=0;
+
+  window.addEventListener("pointermove", function(e){
+    tx=(e.clientX/window.innerWidth)*2-1;
+    ty=(e.clientY/window.innerHeight)*2-1;
+  },{passive:true});
+
+  function resize(){
+    var r=canvas.getBoundingClientRect();
+    var w=Math.max(r.width,1), hgt=Math.max(r.height,1);
+    renderer.setSize(w,hgt,false);
+    camera.aspect=w/hgt; camera.updateProjectionMatrix();
+  }
+  resize();
+  window.addEventListener("resize", resize, {passive:true});
+
+  // stop rendering once the set scrolls away
+  var visible=true;
+  if("IntersectionObserver" in window){
+    new IntersectionObserver(function(en){ visible=en[0].isIntersecting; },{threshold:0.02})
+      .observe(canvas);
+  }
+
+  var t0=performance.now(), lastT=0, screenClock=0;
+  window.__set = {scene:scene, camera:camera, target:target, guy:guy, monitor:monitor, renderer:renderer, render:function(){ camera.lookAt(target); renderer.render(scene,camera); }};   // tuning handle
+
+  /* ---------- acting ----------
+     A beat is a short piece of business: lean in, slump, fist pump, head
+     shake, a sip. One plays every few seconds; the rest of the time he
+     breathes, bounces a leg and follows his own cursor with his head. */
+  var beat = null, beatT = 0, beatLen = 0, nextBeat = 2.5;
+  var pose = {lean:0, slump:0, fist:0, shake:0, sip:0, nod:0, glance:0};   // eased 0..1 targets
+  var poseT = {lean:0, slump:0, fist:0, shake:0, sip:0, nod:0, glance:0};
+  function startBeat(name, len){ beat = name; beatT = 0; beatLen = len; }
+  window.__investorBeat = startBeat;
+
+  /* ---------- the reveal push-in ----------
+     When the intro hands over, the camera starts a little wide and
+     eases into the framed shot. It is the one camera move the page
+     makes on its own, so it can afford to be slow. */
+  var revealAt = -1;
+  window.__sceneReveal = function(){ revealAt = performance.now(); };
+  function pushIn(){
+    if(revealAt < 0) return 1;
+    var k = Math.min(1, (performance.now() - revealAt) / 2600);
+    return 1 - Math.pow(1 - k, 3);          // ease-out cubic
+  }
+
+  var simT = null;   // when set, frames advance by a fixed step (previewing)
+  function frame(){
+    requestAnimationFrame(frame);
+    if(!visible || document.hidden) return;
+    step((performance.now()-t0)/1000);
+  }
+  window.__set.step = function(dt){ simT = (simT == null ? lastT : simT) + dt; step(simT); };
+  function step(t){
+    var dt = Math.min(t - lastT, 0.05); lastT = t;
+    px += (tx-px)*0.045;
+    py += (ty-py)*0.045;
+
+    var pi = 1 - pushIn();                  // 1 at the start of the move, 0 when settled
+    camera.position.x = CAM.x - px*1.0 + Math.sin(t*0.19)*0.25 - pi*2.2;
+    camera.position.y = CAM.y - py*0.5 + Math.sin(t*0.27)*0.10 + pi*0.8;
+    camera.position.z = CAM.z + Math.cos(t*0.16)*0.20 - pi*1.6;
+    camera.lookAt(target);
+
+    // ---- acting ----
+    nextBeat -= dt;
+    if(!beat && nextBeat <= 0){
+      var pick = ["lean","slump","sip","shake","lean","sip","glance"][Math.floor(Math.random()*7)];
+      startBeat(pick, pick === "sip" ? 3.2 : pick === "glance" ? 1.8 : 1.6);
+      nextBeat = 5 + Math.random() * 7;
+    }
+    // every beat's target ramps up then down over its length
+    for(var pk in poseT) poseT[pk] = 0;
+    if(beat){
+      beatT += dt;
+      var u = beatT / beatLen, env = u < 0.3 ? u/0.3 : u > 0.75 ? Math.max(0, (1-u)/0.25) : 1;
+      poseT[beat] = env;
+      if(beatT >= beatLen) beat = null;
+    }
+    for(var pk2 in pose) pose[pk2] += (poseT[pk2] - pose[pk2]) * Math.min(1, dt*8);
+
+    // ---- body ----
+    // breathing lives in the torso; the legs stay planted
+    var breath = Math.sin(t*1.6)*0.012;
+    torso.scale.set(1, 1 + breath, 1);
+    // a slow heel tap, eased, not a switch
+    legR.rotation.x = 0.85 + Math.max(0, Math.sin(t*3.1)) * 0.05;
+    // lean in / slump back bend at the hips; the seat does not move
+    torso.rotation.x += ((-pose.lean*0.26 + pose.slump*0.22) - torso.rotation.x) * Math.min(1, dt*7);
+    torso.position.z = -pose.lean*0.10 + pose.slump*0.08;
+    guy.rotation.y = Math.sin(t*0.5)*0.035;
+
+    // ---- head ----
+    // follows his own cursor, with a little lag, and the beats push it
+    var lookX = ((cur.x / 512) - 0.5) * 0.45, lookY = ((cur.y / 320) - 0.5) * 0.22;
+    var shakeY = pose.shake ? Math.sin(t*14)*0.28*pose.shake : 0;
+    var nodX = pose.nod ? Math.sin(t*9)*0.12*pose.nod : 0;
+    // a glance: he turns to the camera (which sits to his left-front)
+    var glanceY = pose.glance * 0.95, glanceX = pose.glance * 0.05;
+    lookX = lookX * (1 - pose.glance) + glanceY; lookY = lookY * (1 - pose.glance) + glanceX;
+    head.rotation.y += ((lookX + shakeY) - head.rotation.y) * Math.min(1, dt*5);
+    head.rotation.x += ((lookY + nodX - pose.lean*0.12 + pose.slump*0.10 + pose.sip*0.22) - head.rotation.x) * Math.min(1, dt*5);
+    head.rotation.z += ((pose.sip*0.06) - head.rotation.z) * Math.min(1, dt*5);
+    head.position.y = HEAD_Y + Math.sin(t*1.7)*0.012 - pose.slump*0.05 + pose.fist*0.05;
+    // the face follows the head
+    eL.position.set(-0.24, HEAD_Y + 0.10, -0.42); eR.position.set(0.24, HEAD_Y + 0.10, -0.42); smile.position.set(0, HEAD_Y - 0.17, -0.42);
+    eL.rotation.copy(head.rotation); eR.rotation.copy(head.rotation);
+    // rotate the features around the head's centre so they stay on the face
+    [eL, eR, smile].forEach(function(f){
+      var ox = f === eL ? -0.24 : f === eR ? 0.24 : 0, oy = f === smile ? -0.17 : 0.10, oz = -0.42;
+      var cy = Math.cos(head.rotation.y), sy = Math.sin(head.rotation.y), cx = Math.cos(head.rotation.x), sx = Math.sin(head.rotation.x);
+      var y1 = oy*cx - oz*sx, z1 = oy*sx + oz*cx;             // pitch
+      var x2 = ox*cy + z1*sy, z2 = -ox*sy + z1*cy;            // yaw
+      f.position.set(x2, head.position.y + y1, z2);
+    });
+    smile.rotation.set(head.rotation.x, head.rotation.y, Math.PI);
+
+    // ---- left hand: types, or lifts the can, or pumps ----
+    var typeLift = Math.max(0, Math.sin(t*7.4)) * 0.06;
+    _keyW.set(KEY_HOME.x + Math.sin(t*2.3)*0.12, KEY_HOME.y + typeLift, KEY_HOME.z + Math.cos(t*1.7)*0.06);
+    if(pose.sip > 0.02){
+      // hand goes to the can, can goes to the mouth, both come back
+      head.getWorldPosition(_faceW); _faceW.z -= 0.62; _faceW.y -= 0.12;
+      var s1 = Math.min(1, pose.sip * 1.4);              // reach the can first, then lift
+      _canW.copy(sipHome).lerp(_faceW, Math.max(0, (pose.sip - 0.3) / 0.7));
+      sipCan.position.copy(_canW);
+      sipCan.rotation.x = -0.9 * Math.max(0, (pose.sip - 0.5) / 0.5);
+      _canW.y += 0.16;
+      _keyW.lerp(_canW, s1);
+    } else {
+      sipCan.position.copy(sipHome); sipCan.rotation.x = 0;
+    }
+    if(pose.fist > 0.02){
+      // a punch into the air above the shoulder
+      head.getWorldPosition(_faceW); _faceW.x -= 0.55; _faceW.y += 0.55 + pose.fist*0.25; _faceW.z += 0.1;
+      _keyW.lerp(_faceW, pose.fist);
+    }
+    aimArm(armLrig, _keyW, typeLift < 0.01);
+
+    // the mouse wanders the pad, pauses, and clicks
+    nextMove -= dt; nextClick -= dt;
+    if(nextMove <= 0){
+      mouseT.x = mouseHome.x + (Math.random()-0.5)*0.5;
+      mouseT.z = mouseHome.z + (Math.random()-0.5)*0.34;
+      nextMove = 0.6 + Math.random()*1.6;
+      // the on-screen cursor heads somewhere too, usually a button
+      var toBtn = Math.random() < 0.6 ? BTN[Math.random()<0.55?0:1] : null;
+      cur.tx = toBtn ? toBtn.x + 20 + Math.random()*40 : 60 + Math.random()*400;
+      cur.ty = toBtn ? toBtn.y + 8 + Math.random()*16 : 60 + Math.random()*180;
+    }
+    mouse.position.x += (mouseT.x - mouse.position.x) * Math.min(1, dt*6);
+    mouse.position.z += (mouseT.z - mouse.position.z) * Math.min(1, dt*6);
+    cur.x += (cur.tx - cur.x) * Math.min(1, dt*7);
+    cur.y += (cur.ty - cur.y) * Math.min(1, dt*7);
+    cur.hover = 0;
+    for(var bi=0;bi<BTN.length;bi++){ var Bq=BTN[bi]; if(cur.x>Bq.x && cur.x<Bq.x+Bq.w && cur.y>Bq.y && cur.y<Bq.y+Bq.h) cur.hover = bi+1; }
+
+    if(nextClick <= 0){
+      nextClick = 1.4 + Math.random()*2.6;
+      pressT = 0.14;
+      if(cur.hover){
+        var kind = BTN[cur.hover-1].label;
+        cur.flash = 1; cur.flashKind = kind;
+        cur.fillTag = (kind==="BUY" ? "BOUGHT " : "SOLD ") + "$" + Math.round(20+Math.random()*180) + " · " + (0.0004+Math.random()*0.0002).toFixed(6);
+        cur.fillT = 1.6;
+        startBeat("nod", 0.6);
+        startBeat(kind === "BUY" ? (Math.random() < 0.5 ? "fist" : "lean") : (Math.random() < 0.5 ? "shake" : "slump"), 1.4);
+        nextBeat = 4 + Math.random() * 6;
+      }
+    }
+    pressT = Math.max(0, pressT - dt);
+    mouseBody.scale.y = 0.55 - (pressT > 0 ? 0.12 : 0);
+    if(cur.flash > 0) cur.flash = Math.max(0, cur.flash - dt*3.5);
+    if(cur.fillT > 0) cur.fillT -= dt;
+
+    // the right hand rides the mouse
+    _mouseW.set(mouse.position.x, mouse.position.y + 0.13, mouse.position.z);
+    aimArm(armRig, _mouseW, pressT > 0);
+
+    // repaint the screen a few times a second so the cursor moves
+    screenClock += dt;
+    if(screenClock > 0.09){ screenClock = 0; paintScreen(null); }
+
+    // the monitor flickers the way a chart does
+    screenLight.intensity = 2.4 + Math.sin(t*5.3)*0.22 + Math.sin(t*13.7)*0.08;
+
+    // the bulb sways on its cord, and the light goes with it
+    var sway = Math.sin(t*0.62)*0.07;
+    bulb.position.x = -1.2 + sway;  glass.position.x = -1.2 + sway;
+    bulb.position.z =  0.5 + Math.cos(t*0.47)*0.05; glass.position.z = bulb.position.z;
+    bulb.intensity = 2.4 + Math.sin(t*2.1)*0.06;
+
+    // dust drifts up and wraps
+    var dp = dust.geometry.attributes.position.array;
+    for(var k=0;k<DUST_N;k++){
+      dp[k*3+1] += dustVel[k]*dt;
+      dp[k*3]   += Math.sin(t*0.7 + k)*0.0012;
+      if(dp[k*3+1] > 7.0) dp[k*3+1] = 0.3;
+    }
+    dust.geometry.attributes.position.needsUpdate = true;
+
+    renderer.render(scene,camera);
+  }
+
+  // Draw one frame synchronously before the loop starts. rAF does not
+  // run in a background or occluded tab, and without this the set would
+  // sit black until the tab is focused - the visitor would see nothing
+  // and assume it was broken.
+  renderer.render(scene,camera);
+  if(!reduced) frame();
+})();
+
+/* ============================================================
+   THE PLAY BUTTON
+   ============================================================ */
+(function(){
+  var stage=document.getElementById("playstage");
+  var btn=document.getElementById("play3d");
+  var copy=document.querySelector(".bb-in");
+  if(!btn) return;
+
+  // hold the page still while the opener is up
+  document.documentElement.classList.add("intro-lock");
+  document.body.classList.add("intro-lock");
+
+  function drop(){
+    stage.classList.add("gone");
+    setTimeout(function(){ stage.style.display = "none"; }, 560);
+  }
+
+  function reveal(){
+    document.documentElement.classList.remove("intro-lock");
+    document.body.classList.remove("intro-lock");
+    if(copy) copy.classList.add("shown");
+    if(typeof window.__sceneReveal === "function") window.__sceneReveal();
+  }
+
+  btn.addEventListener("click", function(e){
+    if(typeof FX!=="undefined"){
+      FX.burst(e.clientX,e.clientY,{count:22,color:"#e0402e",size:8,speed:520,ttl:1.5,z:200});
+    }
+    var intro=document.getElementById("intro");
+    if(intro && !intro.dataset.gone && typeof window.__playIntro==="function"){
+      SND.open();
+      window.__playIntro(reveal);
+      // both screens are black, so the handover is invisible
+      setTimeout(drop, 30);
+    } else {
+      drop();
+      reveal();
+    }
+  });
+})();
+
+/* ============================================================
+   CONFIG
+   This is the only part you need to edit.
+   Change a value, save the file, refresh the page.
+   Leave a link as "" (two empty quotes) to hide it.
+   ============================================================ */
+const CONFIG = {
+  service:  "REKTFLIX",     // the streaming brand, used everywhere
+  ticker:   "$INVSTR",
+  name:     "The Investor",
+  contract: "0x0000000000000000000000000000000000000000",
+  twitter:  "",
+  chart:    "",
+  telegram: ""    // empty string hides the link
+};
+/* ==================== end of CONFIG ==================== */
+
+document.querySelectorAll("[data-cfg]").forEach(function (el) {
+  var k = el.getAttribute("data-cfg");
+  if (typeof CONFIG[k] === "string" && CONFIG[k] !== "") el.textContent = CONFIG[k];
+});
+document.title = CONFIG.name + " — " + CONFIG.ticker;
+
+/* the service name appears in the nav, the billboard, the intro and
+   the footer, so it is written once and stamped into all of them */
+document.querySelectorAll("[data-brand]").forEach(function(el){
+  el.textContent = el.getAttribute("data-brand") === "original"
+    ? (/^[AEIOU]/i.test(CONFIG.service) ? "An " : "A ") + CONFIG.service + " Original"
+    : CONFIG.service;
+});
+
+/* the wordmark is set letter by letter so the baseline can bow:
+   the outer letters stand tallest, the middle dips, the way a
+   streaming marquee reads from across the room */
+document.querySelectorAll(".markText, .brand b").forEach(function(el){
+  var s = el.textContent, n = s.length, mid = (n - 1) / 2;
+  el.textContent = "";
+  for(var i = 0; i < n; i++){
+    var b = document.createElement("b");
+    b.textContent = s[i];
+    var t = (i - mid) / (mid || 1);
+    b.style.setProperty("--bow", (1 + 0.16 * t * t).toFixed(3));
+    b.style.setProperty("--i", i);
+    el.appendChild(b);
+  }
+});
+
+document.querySelectorAll("#links [data-link]").forEach(function (li) {
+  var url = CONFIG[li.getAttribute("data-link")];
+  if (url) { var a = li.querySelector("a"); a.href = url; a.target = "_blank"; a.rel = "noopener"; }
+  else li.remove();
+});
+
+/* ---------- toast + copy ---------- */
+var toast = document.getElementById("toast"), toastTimer;
+function showToast(m){ toast.textContent=m; toast.classList.add("on");
+  clearTimeout(toastTimer); toastTimer=setTimeout(function(){toast.classList.remove("on");},1700); }
+
+function legacyCopy(text){
+  var ta=document.createElement("textarea"); ta.value=text; ta.setAttribute("readonly","");
+  ta.style.position="fixed"; ta.style.top="-1000px";
+  document.body.appendChild(ta); ta.select();
+  var ok=false; try{ ok=document.execCommand("copy"); }catch(e){ ok=false; }
+  document.body.removeChild(ta); return ok;
+}
+
+document.getElementById("copy").addEventListener("click", function(){
+  var t=document.getElementById("ca").textContent.trim();
+  if(navigator.clipboard && window.isSecureContext){
+    navigator.clipboard.writeText(t).then(
+      function(){ showToast("copied"); },
+      function(){ showToast(legacyCopy(t)?"copied":"select it manually"); });
+  } else showToast(legacyCopy(t)?"copied":"select it manually");
+});
+
+/* ---------- nav goes solid once you leave the billboard ---------- */
+(function(){
+  var nav=document.getElementById("nav"), ticking=false;
+  function check(){ nav.classList.toggle("solid", window.scrollY>90); ticking=false; }
+  window.addEventListener("scroll", function(){
+    if(!ticking){ ticking=true; requestAnimationFrame(check); }
+  }, {passive:true});
+  check();
+})();
+
+/* ============================================================
+   CONTENT
+   Rows are built from data so the copy lives in one place.
+   ============================================================ */
+/* Video sources may arrive inlined as data URLs (the single-file build).
+   Hosts that sandbox the page tend to refuse data: for media while
+   allowing blob:, so every source is turned into an object URL once. */
+var __mediaCache = {};
+function mediaURL(src){
+  if(!src || src.slice(0,5) !== "data:") return src;
+  if(__mediaCache[src]) return __mediaCache[src];
+  try{
+    var comma = src.indexOf(","), mime = src.slice(5, src.indexOf(";"));
+    var bin = atob(src.slice(comma + 1)), u8 = new Uint8Array(bin.length);
+    for(var k = 0; k < bin.length; k++) u8[k] = bin.charCodeAt(k);
+    var url = URL.createObjectURL(new Blob([u8], {type: mime || "video/mp4"}));
+    __mediaCache[src] = url;
+    return url;
+  }catch(e){ return src; }
+}
+
+/* preview sound: one switch for every card, remembered between visits */
+var PREVIEW_SOUND = false, PREVIEW_SOUND_LISTENERS = [];
+try{ PREVIEW_SOUND = localStorage.getItem("invstr_prevsnd") === "1"; }catch(e){}
+function setPreviewSound(on){
+  PREVIEW_SOUND = !!on;
+  try{ localStorage.setItem("invstr_prevsnd", PREVIEW_SOUND ? "1" : "0"); }catch(e){}
+  PREVIEW_SOUND_LISTENERS.forEach(function(f){ f(); });
+}
+
+/* [tag, runtime, video, poster, title, blurb, progress] */
+/* ---------- sound ----------
+   Everything is synthesised on the spot with WebAudio: no files, nothing
+   borrowed. The first call happens inside a click, which is what browsers
+   need before they will play anything. */
+var SND = (function(){
+  var ctx = null, muted = false;
+  try{ muted = localStorage.getItem("invstr_mute") === "1"; }catch(e){}
+  function ac(){
+    if(!ctx){ try{ ctx = new (window.AudioContext || window.webkitAudioContext)(); }catch(e){} }
+    if(ctx && ctx.state === "suspended") ctx.resume();
+    return ctx;
+  }
+  function tone(f, t0, dur, type, gain, slideTo){
+    var c = ac(); if(!c || muted) return;
+    var o = c.createOscillator(), g = c.createGain(), t = c.currentTime + t0;
+    o.type = type || "sine";
+    o.frequency.setValueAtTime(f, t);
+    if(slideTo) o.frequency.exponentialRampToValueAtTime(slideTo, t + dur);
+    g.gain.setValueAtTime(0.0001, t);
+    g.gain.exponentialRampToValueAtTime(gain || 0.2, t + 0.012);
+    g.gain.exponentialRampToValueAtTime(0.0001, t + dur);
+    o.connect(g); g.connect(c.destination);
+    o.start(t); o.stop(t + dur + 0.05);
+  }
+  return {
+    // the opener: a low hit, a fifth above it, and a long shimmer
+    open:  function(){
+      tone(98,0,0.55,"triangle",0.34,60);               // ta
+      tone(65,0.34,2.2,"triangle",0.42,40);              // dum
+      tone(130,0.36,2.0,"sine",0.22); tone(196,0.40,2.2,"sine",0.14); tone(392,0.48,2.6,"sine",0.06); tone(784,0.55,2.8,"sine",0.025);
+    },
+    buy:   function(){ tone(520,0,0.09,"square",0.07); tone(780,0.08,0.16,"square",0.07); },
+    sell:  function(){ tone(880,0,0.08,"triangle",0.11); tone(1320,0.07,0.12,"triangle",0.11); tone(1760,0.15,0.26,"sine",0.09); },
+    rug:   function(){ tone(160,0,0.8,"sawtooth",0.15,40); tone(90,0.05,1.0,"square",0.09,28); },
+    click: function(){ tone(420,0,0.04,"square",0.04); },
+    toggle: function(){ muted = !muted; try{ localStorage.setItem("invstr_mute", muted ? "1" : "0"); }catch(e){} return muted; },
+    isMuted: function(){ return muted; }
+  };
+})();
+
+var EPISODES = [
+  ["EP 1","0:15","ep1.mp4","ep1.jpg","The Onboarding","In bed, hand under the sheets, scrolling. A reel said +$18,400. He swiped up with the rent.",100],
+  ["EP 2","0:13","ep2.mp4","ep2.jpg","Liquidity Provider","Footsteps on the stairs. &ldquo;Are you winning, son?&rdquo; Alt-tab to Q3 REVENUE. Thumbs up. Nuggets.",100],
+  ["EP 3","0:15","ep3.mp4","ep3.jpg","Dev Sold","WAGMI in the chat. One green candle. Then one SELL, one red candle to the floor, liquidity gone. &ldquo;Healthy correction.&rdquo;",74],
+  /* an empty video slot = still in production; the card shows a still and a "soon" tag */
+  ["EP 4","0:07","ep4.mp4","ep4.jpg","Diamond Hands","Down 97%. Hand shaking over SELL. Two sticky notes: DO NOT SELL. STILL DON'T. He hugs the monitor.",41],
+  ["EP 5","0:11","ep5.mp4","ep5.jpg","Airdrop","&ldquo;You are eligible.&rdquo; $19,400. Champagne energy drink. Then Approve wallet access. Then $0.00.",12],
+  ["EP 6","0:13","ep6.mp4","ep6.jpg","Still Here","Sunrise through the small window. Cold coffee. He types the ticker. Season 2 loading.",0]
+];
+
+var TEN = [
+  ["$214","assets under management"],
+  ["-97.4%","all time"],
+  ["1,204","trades placed"],
+  ["0","profitable"],
+  ["19h","average screen time"],
+  ["∞","conviction"]
+];
+
+var MEMES = [
+  ["m-suit.jpg","The Pitch Deck","One slide. It is the chart. The chart is red.","He calls this &ldquo;presenting to the market.&rdquo; The market is not present."],
+  ["m-asleep.jpg","Risk Management","He steps away from the desk. Technically.","Nine hours at the keyboard, eight of them unconscious. Still counts as screen time."],
+  ["m-mom.jpg","Operational Support","The fund provides meals. The fund is his mother.","She has been holding that plate for six minutes. He is watching a line."],
+  ["m-hodl.jpg","The Thesis","Four letters. No exit plan. Correct, eventually.","The sign is cardboard. The conviction is not."]
+];
+
+function el(tag, cls, html){
+  var n=document.createElement(tag);
+  if(cls) n.className=cls;
+  if(html!=null) n.innerHTML=html;
+  return n;
+}
+
+/* episodes */
+(function(){
+  var rail=document.getElementById("railEps");
+  EPISODES.forEach(function(e){
+    var c=el("button","card card-ep");
+    c.type="button";
+
+    if(!e[2]){
+      // not shot yet: a still, a SOON tag, and the details sheet on click
+      c.innerHTML =
+        '<div class="card-still">'+
+          '<img src="'+e[3]+'" width="460" height="460" decoding="async" alt="">'+
+          '<span class="tag">'+e[0]+'</span>'+
+          '<span class="runtime soon">'+e[1]+'</span>'+
+          '<span class="prog"><i data-prog="0"></i></span>'+
+        '</div>'+
+        '<div class="card-body"><h4>'+e[4]+'</h4></div>';
+      c.addEventListener("click", function(){ openSheet(e[3], e[4], e[5]); });
+      rail.appendChild(c);
+      return;
+    }
+
+    c.innerHTML =
+      '<div class="card-still">'+
+        '<video class="card-vid" muted loop playsinline preload="none" poster="'+e[3]+'" data-src="'+e[2]+'"></video>'+
+        '<span class="tag">'+e[0]+'</span>'+
+        '<span class="runtime">'+e[1]+'</span>'+
+        '<span class="card-play" aria-hidden="true"><span>&#9654;</span></span>'+
+        '<span class="card-snd" role="button" tabindex="0" aria-label="Sound" title="Sound on/off">&#128263;</span>'+
+        '<span class="card-orig" aria-hidden="true">' + CONFIG.service + ' original</span>'+
+        (e[0] === "EP 6" ? '<span class="card-new" aria-hidden="true">New</span>' : '')+
+        '<span class="prog"><i data-prog="'+e[6]+'"></i></span>'+
+      '</div>'+
+      '<div class="card-body"><h4>'+e[4]+'</h4></div>';
+
+    // hover = preview, exactly like a streaming row. Silent by default;
+    // the corner button turns preview sound on for every card.
+    var v = c.querySelector("video"), hoverT = 0, snd = c.querySelector(".card-snd");
+    function paintSnd(){ snd.innerHTML = PREVIEW_SOUND ? "&#128266;" : "&#128263;"; snd.classList.toggle("on", PREVIEW_SOUND); }
+    paintSnd();
+    PREVIEW_SOUND_LISTENERS.push(function(){ v.muted = !PREVIEW_SOUND; paintSnd(); });
+    function preview(){
+      hoverT = setTimeout(function(){
+        if(!v.getAttribute("src")){ v.src = mediaURL(v.getAttribute("data-src")); }
+        v.currentTime = 0;
+        v.muted = !PREVIEW_SOUND;
+        var pr = v.play();
+        if(pr && pr.catch) pr.catch(function(){ v.muted = true; var p2 = v.play(); if(p2 && p2.catch) p2.catch(function(){}); });
+        c.classList.add("previewing");
+      }, 260);
+    }
+    snd.addEventListener("click", function(ev){
+      ev.stopPropagation(); ev.preventDefault();
+      setPreviewSound(!PREVIEW_SOUND);
+      if(!c.classList.contains("previewing")){ clearTimeout(hoverT); preview(); }
+    });
+    snd.addEventListener("keydown", function(ev){ if(ev.key === "Enter" || ev.key === " "){ ev.preventDefault(); ev.stopPropagation(); snd.click(); } });
+    function stop(){
+      clearTimeout(hoverT);
+      v.pause(); c.classList.remove("previewing");
+    }
+    c.addEventListener("mouseenter", preview);
+    c.addEventListener("focus", preview);
+    c.addEventListener("mouseleave", stop);
+    c.addEventListener("blur", stop);
+
+    c.addEventListener("click", function(){ stop(); openPlayer(e); });
+    rail.appendChild(c);
+  });
+})();
+
+/* top 10 */
+(function(){
+  var rail=document.getElementById("railTen");
+  TEN.forEach(function(t,i){
+    var c=el("div","card");
+    c.innerHTML='<span class="rank" style="--r:'+i+'">'+(i+1)+'</span>'+
+      '<div class="ten-body"><b>'+t[0]+'</b><span>'+t[1]+'</span></div>';
+    rail.appendChild(c);
+  });
+})();
+
+/* my list */
+(function(){
+  var rail=document.getElementById("railMemes");
+  MEMES.forEach(function(m){
+    var c=el("button","card");
+    c.type="button";
+    c.innerHTML =
+      '<div class="card-still"><img src="'+m[0]+'" width="460" height="460" decoding="async" alt=""></div>'+
+      '<div class="card-body"><h4>'+m[1]+'</h4><p>'+m[2]+'</p></div>';
+    c.addEventListener("click", function(){ openSheet(m[0], m[1], m[3]); });
+    rail.appendChild(c);
+  });
+})();
+
+/* ---------- the details sheet ---------- */
+var lb=document.getElementById("lb");
+function openSheet(img,title,cap){
+  document.getElementById("lbImg").src=img;
+  document.getElementById("lbTitle").textContent=title;
+  document.getElementById("lbCap").innerHTML=cap;
+  lb.classList.add("on");
+}
+lb.addEventListener("click", function(){ lb.classList.remove("on"); });
+
+/* ---------- terminal toolbar (cosmetic) ---------- */
+(function(){
+  var tf = document.querySelector(".tf"); if(!tf) return;
+  tf.addEventListener("click", function(e){
+    var b = e.target.closest("button"); if(!b) return;
+    [].forEach.call(tf.children, function(x){ x.setAttribute("aria-pressed", x === b ? "true" : "false"); });
+    if(typeof SND !== "undefined") SND.click();
+  });
+})();
+
+/* ---------- the news wire ---------- */
+(function(){
+  var run = document.getElementById("wireRun"); if(!run) return;
+  var items = [
+    ["down", "$INVSTR -62% on the day", "he describes this as consolidation"],
+    ["up", "mom delivers second plate of nuggets", "fund secures fresh liquidity"],
+    ["down", "dev sold", "chart described as a healthy correction"],
+    ["up", "airdrop claimed", "wallet drained eleven seconds later"],
+    ["down", "position now -97%", "sticky note upgraded to permanent marker"],
+    ["up", "new ticker typed", "season two confirmed by nobody"],
+    ["down", "sleep: 3h", "screen time: 19h"],
+    ["up", "conviction remains at 100%", "everything else does not"]
+  ];
+  var html = "";
+  for(var r=0;r<2;r++) items.forEach(function(it){
+    html += '<span>' + (it[0]==="up" ? '<em>&#9650;</em>' : '<i>&#9660;</i>') + '<b>' + it[1] + '</b> &middot; ' + it[2] + '</span>';
+  });
+  run.innerHTML = html;
+})();
+
+/* ---------- rows reveal on scroll, numbers count up ---------- */
+(function(){
+  var reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  var rows = [].slice.call(document.querySelectorAll(".pad > .row"));
+  if(reduced || !("IntersectionObserver" in window)){ return; }
+  rows.forEach(function(r, i){ if(i > 0) r.classList.add("reveal"); });
+  var io = new IntersectionObserver(function(es){
+    es.forEach(function(e){ if(e.isIntersecting){ e.target.classList.add("in"); io.unobserve(e.target); } });
+  }, {threshold:0.12});
+  rows.forEach(function(r){ io.observe(r); });
+
+  // the top-6 figures count from zero the first time you see them
+  var ten = document.getElementById("railTen");
+  if(ten){
+    var done = false;
+    var io2 = new IntersectionObserver(function(es){
+      if(!es[0].isIntersecting || done) return; done = true; io2.disconnect();
+      [].forEach.call(ten.querySelectorAll(".ten-body b"), function(b, i){
+        var final = b.textContent, num = parseFloat(final.replace(/[^0-9.\-]/g, ""));
+        if(isNaN(num)) return;
+        var prefix = final.match(/^[^0-9\-]*/)[0], suffix = final.replace(/^[^0-9\-]*[0-9.,\-]+/, "");
+        var dec = (final.match(/\.(\d+)/) || ["",""])[1].length, t0 = null;
+        function step(ts){
+          if(!t0) t0 = ts; var k = Math.min(1, (ts - t0) / 1100), e = 1 - Math.pow(1 - k, 3);
+          var v = num * e;
+          b.textContent = prefix + (Math.abs(num) >= 1000 ? Math.round(v).toLocaleString() : v.toFixed(dec)) + suffix;
+          if(k < 1) requestAnimationFrame(step); else b.textContent = final;
+        }
+        setTimeout(function(){ requestAnimationFrame(step); }, i * 90);
+      });
+    }, {threshold:0.3});
+    io2.observe(ten);
+  }
+})();
+
+/* ---------- sound toggle ---------- */
+(function(){
+  var b = document.getElementById("sndBtn");
+  function paintBtn(){ var m = SND.isMuted(); b.innerHTML = m ? "&#128263; sound off" : "&#128266; sound on"; b.setAttribute("aria-pressed", m ? "true" : "false"); }
+  b.addEventListener("click", function(){ SND.toggle(); paintBtn(); if(!SND.isMuted()) SND.click(); });
+  paintBtn();
+})();
+
+/* ---------- the player ---------- */
+var vp = document.getElementById("vp"), vpVid = document.getElementById("vpVid"), vpIdx = 0;
+var vpUnmute = document.getElementById("vpUnmute"), vpSnd = document.getElementById("vpSnd");
+function paintVpSnd(){
+  var m = vpVid.muted;
+  vpSnd.innerHTML = m ? "&#128263; Sound off" : "&#128266; Sound on";
+  vpSnd.classList.toggle("off", m);
+  vpUnmute.hidden = !m;
+}
+function openPlayer(e){
+  vpIdx = EPISODES.indexOf(e);
+  document.getElementById("vpTag").textContent = e[0] + " \u00B7 " + e[1];
+  document.getElementById("vpTitle").textContent = e[4];
+  document.getElementById("vpCap").innerHTML = e[5];
+  vpVid.src = mediaURL(e[2]);
+  vpVid.muted = false;
+  vp.classList.add("on");
+  paintVpSnd();
+  var pr = vpVid.play();
+  if(pr && pr.catch) pr.catch(function(){
+    // the browser refused sound without a fresh gesture: play silent
+    // and put a big unmute button on top of the picture
+    vpVid.muted = true; paintVpSnd();
+    var p2 = vpVid.play(); if(p2 && p2.catch) p2.catch(function(){});
+  });
+}
+vpUnmute.addEventListener("click", function(){ vpVid.muted = false; paintVpSnd(); var p = vpVid.play(); if(p && p.catch) p.catch(function(){}); });
+vpSnd.addEventListener("click", function(){ vpVid.muted = !vpVid.muted; paintVpSnd(); if(vpVid.paused){ var p = vpVid.play(); if(p && p.catch) p.catch(function(){}); } });
+vpVid.addEventListener("volumechange", paintVpSnd);
+// if the host refuses to play the file, say so instead of showing a black box
+vpVid.addEventListener("error", function(){
+  var c = vpVid.error ? vpVid.error.code : 0;
+  var why = c === 4 ? "this host will not serve the video (blocked source)" : c === 3 ? "the video could not be decoded" : c === 2 ? "network error" : "playback stopped";
+  document.getElementById("vpCap").innerHTML = "<b style=\"color:var(--red-hi)\">Can’t play here: " + why + " (code " + c + ").</b> Full clips are in the shorts folder and play on the hosted site.";
+});
+function closePlayer(){ vp.classList.remove("on"); vpVid.pause(); }
+vp.addEventListener("click", function(ev){ if(ev.target === vp) closePlayer(); });
+function stepPlayer(dir){
+  var n = EPISODES.length, i = vpIdx;
+  for(var k=0;k<n;k++){ i = (i + dir + n) % n; if(EPISODES[i][2]) break; }
+  openPlayer(EPISODES[i]);
+}
+document.getElementById("vpPrev").addEventListener("click", function(){ stepPlayer(-1); });
+document.getElementById("vpNext").addEventListener("click", function(){ stepPlayer(1); });
+vpVid.addEventListener("ended", function(){ stepPlayer(1); });
+document.addEventListener("keydown", function(e){
+  if(e.key==="Escape"){ lb.classList.remove("on"); document.getElementById("asw").classList.remove("on"); closePlayer(); }
+});
+
+/* ---------- progress bars fill on first sight ---------- */
+(function(){
+  var bars=[].slice.call(document.querySelectorAll(".prog i"));
+  function fill(){
+    bars.forEach(function(b,i){
+      setTimeout(function(){
+        b.style.transition="width 900ms cubic-bezier(0.22,1,0.36,1)";
+        b.style.width=b.getAttribute("data-prog")+"%";
+      }, 200+i*90);
+    });
+  }
+  if("IntersectionObserver" in window){
+    var io=new IntersectionObserver(function(en){ if(en[0].isIntersecting){ fill(); io.disconnect(); } },{threshold:.2});
+    io.observe(document.getElementById("railEps"));
+  } else fill();
+})();
+
+/* ---------- the top-6 numerals arrive with the row ---------- */
+(function(){
+  var ten = document.getElementById("railTen");
+  if(!ten) return;
+  if(!("IntersectionObserver" in window)){ ten.classList.add("seen"); return; }
+  var io = new IntersectionObserver(function(en){
+    if(en[0].isIntersecting){ ten.classList.add("seen"); io.disconnect(); }
+  }, {threshold:0.25});
+  io.observe(ten);
+})();
+
+/* ---------- drag any rail, with release momentum ---------- */
+(function(){
+  document.querySelectorAll(".rail").forEach(function(rail){
+    var down=false,startX=0,startLeft=0,vel=0,lastX=0,lastT=0,moved=0;
+
+    rail.addEventListener("pointerdown", function(e){
+      down=true; moved=0; startX=lastX=e.clientX; startLeft=rail.scrollLeft;
+      vel=0; lastT=performance.now();
+      rail.classList.add("dragging");
+      rail.setPointerCapture(e.pointerId);
+    });
+
+    rail.addEventListener("pointermove", function(e){
+      if(!down) return;
+      var dx=e.clientX-startX; moved=Math.abs(dx);
+      rail.scrollLeft=startLeft-dx;
+      var now=performance.now(), dt=Math.max(now-lastT,1);
+      vel=(e.clientX-lastX)/dt*16;
+      lastX=e.clientX; lastT=now;
+    });
+
+    function release(){
+      if(!down) return;
+      down=false; rail.classList.remove("dragging");
+      var v=vel;
+      if(typeof FX==="undefined"){ return; }
+      FX.frame(function(){
+        v*=0.94; rail.scrollLeft-=v;
+        if(Math.abs(v)<0.4) return false;
+      });
+    }
+
+    rail.addEventListener("pointerup", release);
+    rail.addEventListener("pointercancel", release);
+    rail.addEventListener("click", function(e){
+      if(moved>6){ e.preventDefault(); e.stopPropagation(); }
+    }, true);
+  });
+})();
+
+/* ============================================================
+   THE LIVE PORTFOLIO
+   A random walk with a permanent downward drift. The number is
+   genuinely live and genuinely only trends one way.
+   ============================================================ */
+(function(){
+  // The visible Live panel was removed, but the series still drives
+  // the chart on the monitor inside the 3D set, so it keeps running
+  // headlessly and every DOM write is guarded.
+  var pnlEl=document.getElementById("pnl"), subEl=document.getElementById("pnlSub"),
+      pathEl=document.getElementById("sparkPath"), fillEl=document.getElementById("sparkFill"),
+      dipsEl=document.getElementById("dips");
+
+  var value=-3888.4, dips=0, N=90, series=[];
+  for(var i=0;i<N;i++) series.push(value+Math.random()*40);
+
+  function draw(){
+    if(!pathEl || !fillEl) return;
+    var min=Math.min.apply(null,series), max=Math.max.apply(null,series);
+    var range=(max-min)||1;
+    var pts=series.map(function(v,i){
+      var x=(i/(N-1))*600, y=72-((v-min)/range)*64;
+      return x.toFixed(1)+","+y.toFixed(1);
+    });
+    pathEl.setAttribute("d","M"+pts.join(" L"));
+    fillEl.setAttribute("d","M0,78 L"+pts.join(" L")+" L600,78 Z");
+  }
+
+  function money(v){
+    var s=Math.abs(v).toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g,",");
+    return (v<0?"-$":"$")+s;
+  }
+
+  function push(v){
+    value=v; series.push(value);
+    if(series.length>N) series.shift();
+    if(pnlEl) pnlEl.textContent=money(value);
+    draw();
+    // the monitor in the 3D set shows this same line
+    if(typeof window.__paintScreen==="function") window.__paintScreen(series.slice(-40));
+  }
+
+  draw();
+  push(value+(Math.random()-0.5)*26-3.4);
+  setInterval(function(){ push(value+(Math.random()-0.5)*26-3.4); },1400);
+
+  function hit(amount,label,e){
+    push(value-amount);
+    if(subEl) subEl.textContent=label;
+    if(typeof FX!=="undefined" && e)
+      FX.burst(e.clientX,e.clientY,{count:12,color:"#d64533",size:7,speed:340,ttl:1.2});
+  }
+
+  var dipBtn=document.getElementById("dipBtn");
+  if(dipBtn) dipBtn.addEventListener("click", function(e){
+    dips++;
+    hit(60+Math.random()*180,"bought the dip · it was not the dip",e);
+    if(dipsEl) dipsEl.textContent="dips bought: "+dips+" · dips remaining: infinite";
+  });
+})();
+
+
+/* ============================================================
+   THE CRASH GAME
+   The crash point uses the same distribution the real ones do:
+   draw r uniform, crash = edge / (1 - r). That gives
+   P(crash > x) = edge / x, so every cash-out target has the same
+   expected value and the only variable is when your nerve goes.
+   A small slice of the draws bust instantly at 1.00x - that is
+   the rug, and it is supposed to feel unfair, because it is.
+   ============================================================ */
+(function(){
+  var cv = document.getElementById("crashCanvas");
+  if(!cv) return;
+  var ctx = cv.getContext("2d");
+
+  var multEl = document.getElementById("mult"),
+      statusEl = document.getElementById("gstatus"),
+      ruggedEl = document.getElementById("rugged"),
+      balEl = document.getElementById("bal"),
+      buyBtn = document.getElementById("buyBtn"),
+      histEl = document.getElementById("hist"),
+      posEl = document.getElementById("pos"),
+      posPnl = document.getElementById("posPnl"),
+      tapeEl = document.getElementById("tape"),
+      fillsEl = document.getElementById("fills"),
+      posVal = document.getElementById("posVal"),
+      noteEl = document.getElementById("gnote"),
+      stakeEl = document.getElementById("stake");
+
+  var EDGE = 0.98;
+  var RUG_CHANCE = 0.02;    // instant bust at 1.00x
+
+  var balance = 1000, bet = 50, betMode = 50;
+  var state = "idle";       // idle | running | busted
+  var crashAt = 0, elapsed = 0, lastFrame = 0, mult = 1;
+  // You buy in at whatever the chart is at, exactly like a real entry,
+  // and your payout is the move from there: mult / entryMult.
+  var inPos = 0, entryMult = 1;
+  // px is the price on the chart: the true multiplier times the wobble.
+  // You buy and sell at px, so a dump you hold through is a real loss
+  // and a pump you sell into is a real win. The rug still fires on the
+  // hidden true multiplier, so a dump is never the rug itself.
+  var bestVal = 0, bestPx = 1, stakeTotal = 0;
+  // session stats: realized pnl, wins/losses, best exit multiple
+  var sess = {pnl:0, wins:0, losses:0, n:0, best:0, vol:0, holders:1};
+  var BASE_PRICE = 0.00042, BASE_MC = 42000, BASE_LIQ = 8100;   // the high-water mark of the position, for the post-mortem
+  var ffwd = false;   // set once you are fully out: the rest of the round plays at speed
+  var px = 1, regime = "calm", regimeT = 0, wobTarget = 0, wobRate = 0.10;
+  var history = [];
+
+  // A crash multiplier only ever rises, which would draw a chart with
+  // no red candles at all. A little mean-reverting noise on top gives
+  // individual candles that close down inside an uptrend - which is
+  // what a memecoin chart actually looks like. The noise never touches
+  // the payout: cashing out always pays the true multiplier.
+  var CANDLE_SECS = 0.3;
+  var marks = [];   // {i: candle index, p: price, t: "b"|"s"} - your fills, drawn on the chart
+  var idleDim = false;
+  var candles = [], cur = null, candleT = 0, wob = 0, wickScale = 0.03;
+
+  // Every visit starts fresh at $1,000. Nothing is remembered between loads.
+  try{ localStorage.removeItem("invstr_bal"); }catch(e){}
+  function save(){}
+
+  function money(v){ return "$" + Math.round(v).toLocaleString("en-US"); }
+
+  var TAIL = 0.45, CAP = 500;   // 70% clear 2x, half clear 4x, one in ten clears 40x
+
+  var TAPE_NAMES = ["7xKp..3a", "Gm9v..q2", "dev", "whale.sol", "0xRekt", "jeet.eth", "bagz..44", "mom", "Fart..nR", "ape..ape"];
+  function tapePush(){
+    if(!tapeEl) return;
+    var buy = Math.random() < (regime === "dump" ? 0.3 : 0.62);
+    var amt = Math.round(Math.pow(10, 1 + Math.random() * 2.6));
+    var who = TAPE_NAMES[Math.floor(Math.random() * TAPE_NAMES.length)];
+    if(buy) sess.holders += 1; else if(sess.holders > 1 && Math.random() < 0.5) sess.holders -= 1;
+    sess.vol += amt;
+    var row = document.createElement("div");
+    row.innerHTML = '<span class="w">' + who + '</span><span class="' + (buy ? "b" : "s") + '">' + (buy ? "BUY" : "SELL") + '</span><span class="a">' + money(amt) + ' @ ' + px.toFixed(2) + '\u00D7</span>';
+    tapeEl.appendChild(row);
+    while(tapeEl.children.length > 5) tapeEl.removeChild(tapeEl.firstChild);
+  }
+  function fillPush(kind, amt, at){
+    if(!fillsEl) return;
+    var row = document.createElement("div");
+    row.innerHTML = '<span class="' + (kind === "b" ? "b" : "s") + '">' + (kind === "b" ? "BUY" : "SELL") + '</span><span>' + at.toFixed(2) + '\u00D7</span><span class="a">' + money(amt) + '</span>';
+    fillsEl.insertBefore(row, fillsEl.firstChild);
+    while(fillsEl.children.length > 6) fillsEl.removeChild(fillsEl.lastChild);
+  }
+  var stPnl = document.getElementById("stPnl"), stWin = document.getElementById("stWin"),
+      stN = document.getElementById("stN"), stBest = document.getElementById("stBest");
+  function paintSess(){
+    if(!stPnl) return;
+    stPnl.textContent = (sess.pnl >= 0 ? "+" : "-") + money(Math.abs(sess.pnl));
+    stPnl.className = "mono " + (sess.pnl >= 0 ? "up" : "down");
+    var t = sess.wins + sess.losses;
+    stWin.textContent = t ? Math.round(sess.wins / t * 100) + "%" : "\u2013";
+    stN.textContent = String(sess.n);
+    stBest.textContent = sess.best ? sess.best.toFixed(2) + "\u00D7" : "\u2013";
+  }
+
+  function drawCrashPoint(){
+    if(Math.random() < RUG_CHANCE) return 1.00;
+    var r = Math.random();
+    // Heavier tail than a fair crash game: 62% of rounds clear 2x,
+    // a third clear 5x, one in twenty clears 100x. Capped so a round ends.
+    var x = EDGE * Math.pow(1 - r, -1 / TAIL);
+    return Math.min(CAP, Math.max(1.01, Math.floor(x * 100) / 100));
+  }
+
+  function sizeCanvas(){
+    var dpr = Math.min(window.devicePixelRatio || 1, 2);
+    var r = cv.getBoundingClientRect();
+    cv.width = Math.max(1, Math.round(r.width * dpr));
+    cv.height = Math.max(1, Math.round(r.height * dpr));
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+  }
+  sizeCanvas();
+  window.addEventListener("resize", sizeCanvas, {passive:true});
+
+  function paint(bust){
+    var w = cv.clientWidth, hgt = cv.clientHeight;
+    ctx.clearRect(0,0,w,hgt);
+
+    ctx.strokeStyle = "rgba(255,255,255,0.04)";
+    ctx.lineWidth = 1;
+    for(var g=1;g<7;g++){
+      var gy = (hgt/7)*g;
+      ctx.beginPath(); ctx.moveTo(0,gy); ctx.lineTo(w,gy); ctx.stroke();
+    }
+
+    var all = candles.concat(cur ? [cur] : []);
+    if(!all.length){
+      // nothing traded yet: a flat pre-market line with a heartbeat
+      var ty = hgt * 0.55, tt = performance.now() / 1000;
+      ctx.strokeStyle = "rgba(38,196,106,0.45)"; ctx.lineWidth = 1.5; ctx.beginPath();
+      for(var xx = 0; xx <= w; xx += 4){
+        var ph = ((xx / w) * 6 - (tt * 1.4) % 6), blip = Math.abs(ph % 1.5) < 0.12 ? Math.sin(((ph % 1.5) / 0.12) * Math.PI) * 18 : 0;
+        ctx.lineTo(xx, ty - blip);
+      }
+      ctx.stroke();
+      ctx.fillStyle = "rgba(255,255,255,0.28)"; ctx.font = "11px 'IBM Plex Mono', monospace"; ctx.textAlign = "center";
+      ctx.fillText("PRE-MARKET \u00B7 WAITING FOR LIQUIDITY", w/2, ty + 34);
+      ctx.textAlign = "left";
+      return;
+    }
+    if(idleDim) ctx.globalAlpha = 0.45;
+
+    // keep only what fits, newest first, so it scrolls like a real chart
+    var slotW = 13, padX = 14, padY = 30;
+    var maxN = Math.max(6, Math.floor((w - padX*2) / slotW));
+    var view = all.slice(-maxN);
+
+    var lo = Infinity, hi = -Infinity;
+    for(var i=0;i<view.length;i++){ lo = Math.min(lo, view[i].l); hi = Math.max(hi, view[i].h); }
+    if(bust) lo = Math.min(lo, 0.985);
+    var span = (hi - lo) || 0.1;
+    lo -= span * 0.07; hi += span * 0.07; span = hi - lo;
+
+    function X(i){ return padX + i*slotW + slotW/2; }
+    function Y(v){ return padY + (1 - (v - lo)/span) * (hgt - padY*2); }
+
+    var GREEN = "#26c46a", GREEN_D = "#1b8f4d",
+        RED   = "#e0432f", RED_D   = "#a32b1c";
+
+    for(var k=0;k<view.length;k++){
+      var c = view[k], up = c.c >= c.o;
+      var x = X(k);
+      var body = Math.max(Math.abs(Y(c.c) - Y(c.o)), 1.5);
+      var top  = Math.min(Y(c.c), Y(c.o));
+
+      ctx.strokeStyle = up ? GREEN_D : RED_D;
+      ctx.lineWidth = 1.5;
+      ctx.beginPath(); ctx.moveTo(x, Y(c.h)); ctx.lineTo(x, Y(c.l)); ctx.stroke();
+
+      ctx.fillStyle = up ? GREEN : RED;
+      ctx.fillRect(x - slotW*0.34, top, slotW*0.68, body);
+    }
+
+    if(bust){
+      // the rug: one red candle from the last close straight to the floor
+      var bx = X(view.length - 1);
+      var lastOpen = Y(view[view.length-1].o);
+      ctx.fillStyle = RED;
+      ctx.fillRect(bx - slotW*0.34, lastOpen, slotW*0.68, (hgt - padY) - lastOpen);
+      ctx.strokeStyle = RED_D; ctx.lineWidth = 1.5;
+      ctx.beginPath(); ctx.moveTo(bx, lastOpen - 10); ctx.lineTo(bx, hgt - padY + 6); ctx.stroke();
+    } else if(view.length){
+      // the live price line
+      var lastC = view[view.length-1].c, ly = Y(lastC);
+      ctx.strokeStyle = "rgba(255,255,255,0.28)";
+      ctx.setLineDash([3,4]); ctx.lineWidth = 1;
+      ctx.beginPath(); ctx.moveTo(0, ly); ctx.lineTo(w, ly); ctx.stroke();
+      ctx.setLineDash([]);
+    }
+
+    // volume: a bar per candle along the floor, sized by the body
+    var vh = (hgt - padY*2) * 0.16;
+    for(var q=0;q<view.length;q++){
+      var cq = view[q], b = Math.abs(cq.c - cq.o) / (span || 1);
+      var vbar = Math.min(vh, 3 + b * vh * 26 + (q * 7 % 5));
+      ctx.fillStyle = cq.c >= cq.o ? "rgba(38,196,106,0.22)" : "rgba(224,67,47,0.22)";
+      ctx.fillRect(X(q) - slotW*0.34, hgt - padY - vbar, slotW*0.68, vbar);
+    }
+
+    ctx.globalAlpha = 1;
+    // your fills: a green B where you bought, a red S where you sold
+    var off = all.length - view.length;
+    ctx.font = "700 10px 'IBM Plex Mono', monospace";
+    ctx.textAlign = "center"; ctx.textBaseline = "middle";
+    for(var m=0;m<marks.length;m++){
+      var mk = marks[m], vi = mk.i - off;
+      if(vi < 0 || vi >= view.length) continue;
+      var mx = X(vi), my = Y(mk.p), up2 = mk.t === "b";
+      // buys sit under the candle, sells above it, so they never hide the price
+      var cy = my;
+      my += up2 ? 16 : -16;
+      ctx.strokeStyle = up2 ? GREEN : RED; ctx.lineWidth = 1.5;
+      ctx.beginPath(); ctx.moveTo(mx, cy); ctx.lineTo(mx, my); ctx.stroke();
+      ctx.beginPath(); ctx.arc(mx, my, 8, 0, Math.PI*2);
+      ctx.fillStyle = up2 ? GREEN : RED; ctx.fill();
+      ctx.lineWidth = 1.2; ctx.strokeStyle = "rgba(0,0,0,0.6)"; ctx.stroke();
+      ctx.fillStyle = "#fff";
+      ctx.fillText(up2 ? "B" : "S", mx, my + 0.5);
+    }
+  }
+
+  function setStatus(t){ if(statusEl) statusEl.textContent = t; }
+
+  function pushHistory(v){
+    history.unshift(v);
+    if(history.length > 12) history.pop();
+    if(!histEl) return;
+    histEl.innerHTML = "";
+    history.forEach(function(x){
+      var s = document.createElement("span");
+      s.textContent = x.toFixed(2) + "\u00D7";
+      s.className = x >= 2 ? "hi" : "lo";
+      histEl.appendChild(s);
+    });
+  }
+
+  function startRound(){
+    crashAt = drawCrashPoint();
+    elapsed = 0; lastFrame = performance.now();
+    mult = 1; px = 1; wob = 0; candleT = 0; wickScale = 0.03; ffwd = false; idleDim = false;
+    bestVal = 0; bestPx = 1; stakeTotal = 0;
+    regime = "calm"; wobTarget = 0; wobRate = 0.10; regimeT = 2 + Math.random() * 4;
+    candles = []; cur = {o:1, h:1, l:1, c:1}; marks = [];
+    state = "running";
+    ruggedEl.classList.remove("on");
+    multEl.classList.remove("bust");
+    multEl.classList.add("up");
+    setButtons();
+    setStatus(inPos > 0 ? "sell before it goes" : "live · buy in any time");
+    tick();
+  }
+
+  function endRound(){
+    state = "busted";
+    multEl.classList.remove("up");
+    multEl.classList.add("bust");
+    multEl.textContent = crashAt.toFixed(2) + "\u00D7";
+    paint(true);
+    pushHistory(crashAt);
+
+    // the rug is felt, not just shown
+    SND.rug();
+    var chartBox = cv.parentNode, flash = document.getElementById("gflash");
+    if(chartBox){ chartBox.classList.remove("shake"); void chartBox.offsetWidth; chartBox.classList.add("shake"); }
+    if(flash){ flash.className = "game-flash"; void flash.offsetWidth; flash.classList.add("red"); }
+
+    if(inPos > 0){
+      ruggedEl.classList.add("on");
+      var could = document.getElementById("rugCould");
+      var madeIt = bestVal > stakeTotal + 0.5;
+      if(could){
+        could.textContent = madeIt
+          ? "you could have sold for " + money(bestVal) + " at " + bestPx.toFixed(2) + "×"
+          : "it never went above what you put in";
+      }
+      setStatus("rugged at " + crashAt.toFixed(2) + "× · " + money(inPos) + " gone");
+      sess.pnl -= stakeTotal; sess.losses += 1; paintSess();
+      noteEl.textContent = madeIt
+        ? "Peak was " + money(bestVal) + ". He would tell you it is only a loss if you look at it."
+        : "He would tell you it is only a loss if you look at it.";
+      inPos = 0;
+    } else {
+      setStatus((ffwd ? "you were out, it went on to " : "it went at ") + crashAt.toFixed(2) + "\u00D7");
+    }
+    updatePos();
+    setButtons();
+    setTimeout(function(){
+      ruggedEl.classList.remove("on");
+      state = "idle";
+      setButtons();
+      multEl.classList.remove("bust");
+      multEl.textContent = "1.00\u00D7";
+      setStatus(balance < 1 ? "you are out of money. he relates." : "press buy to enter");
+      // the last round stays up, dimmed, until the next buy
+      idleDim = true; paint(false);
+    }, 2600);
+  }
+
+  function tick(){
+    if(state !== "running") return;
+
+    // The round clock accumulates per frame with a clamped delta rather
+    // than reading wall time. requestAnimationFrame stops in a hidden
+    // tab, so wall time would jump on return and bust the player for a
+    // round they were not watching. This way the round simply pauses.
+    var now = performance.now();
+    var dt = Math.min((now - lastFrame) / 1000, 0.05);
+    lastFrame = now;
+    if(ffwd) dt *= 9;      // you are out; skip to the ending
+    elapsed += dt;
+    // gentle at first, then it runs: 2x at ~16s, 10x at ~42s, 100x at ~75s
+    mult = Math.exp(0.115 * elapsed + 0.0009 * elapsed * elapsed);   // 2x ~5.5s, 10x ~16s, 100x ~31s
+
+    if(mult >= crashAt){ endRound(); return; }
+
+    // The true multiplier only rises. A mean-reverting wobble on top of
+    // it gives candles that close red inside the uptrend, and a separate
+    // per-frame wick probe gives the long random shadows a memecoin
+    // chart is mostly made of. Neither touches the payout - a cash-out
+    // always settles on the true multiplier.
+    // regimes: calm noise, a dump that slides 30-60% under the trend and
+    // then claws back, or a pump that spikes 20-60% over it and fades
+    regimeT -= dt;
+    if(regimeT <= 0){
+      var roll = Math.random();
+      if(regime !== "calm"){ regime = "calm"; wobTarget = 0; wobRate = 0.06; regimeT = 3 + Math.random() * 6; }
+      else if(roll < 0.42){ regime = "dump"; wobTarget = -(0.22 + Math.random() * 0.22); wobRate = 0.05; regimeT = 1.5 + Math.random() * 3; }
+      else if(roll < 0.62){ regime = "pump"; wobTarget = 0.15 + Math.random() * 0.30; wobRate = 0.22; regimeT = 0.5 + Math.random() * 1.2; }
+      else { regime = "calm"; wobTarget = -(Math.random() * 0.06); wobRate = 0.10; regimeT = 2 + Math.random() * 5; }
+    }
+    wob += (wobTarget - wob) * wobRate + (Math.random() - 0.5) * 0.065 - 0.003;   // noisier, with a lean down
+    if(wob < -0.85) wob = -0.85;
+    var price = mult * (1 + wob);
+    px = price;
+
+    if(!cur) cur = {o:price, h:price, l:price, c:price};
+
+    // the wick: usually small, occasionally violent
+    var probe = price * (1 + (Math.random() - 0.5) * 2 * wickScale);
+    if(Math.random() < 0.04) probe = price * (1 + (Math.random() - 0.5) * 0.04);
+    cur.h = Math.max(cur.h, price, probe);
+    cur.l = Math.min(cur.l, price, probe);
+    cur.c = price;
+
+    candleT += dt;
+    if(candleT >= CANDLE_SECS){
+      candles.push(cur);
+      cur = {o:price, h:price, l:price, c:price};
+      candleT = 0;
+      // every candle gets its own character
+      wickScale = 0.002 + Math.random() * Math.random() * 0.012;
+      if(candles.length > 260) candles.shift();
+    }
+
+    multEl.textContent = px.toFixed(2) + "\u00D7";
+    updatePos();
+    paint(false);
+    if(Math.random() < 0.06) tapePush();   // other people trading under the chart
+    requestAnimationFrame(tick);
+  }
+
+  /* ---------- controls ---------- */
+  stakeEl.addEventListener("click", function(e){
+    var b = e.target.closest("button[data-bet]");
+    if(!b) return;
+    [].forEach.call(stakeEl.children, function(x){ x.setAttribute("aria-pressed","false"); });
+    b.setAttribute("aria-pressed","true");
+    betMode = b.getAttribute("data-bet");
+  });
+
+  function updatePos(){
+    if(inPos > 0){
+      var live = inPos * (px / entryMult);
+      if(live > bestVal){ bestVal = live; bestPx = px; }
+      if(posPnl){
+        var pct = (px / entryMult - 1) * 100;
+        posPnl.textContent = (pct >= 0 ? "+" : "") + pct.toFixed(1) + "%";
+        posPnl.className = "mono pnl " + (pct >= 0 ? "up" : "down");
+      }
+    }
+    if(!posEl) return;
+    posEl.hidden = inPos <= 0;
+    if(posVal) posVal.textContent = money(inPos * (px / entryMult));
+    ticker();
+  }
+
+  // the strip above the chart follows the price
+  function fmtK(n){ return n >= 1e6 ? "$" + (n/1e6).toFixed(2) + "M" : n >= 1e3 ? "$" + (n/1e3).toFixed(1) + "K" : "$" + Math.round(n); }
+  var tkPrice = document.getElementById("tkPrice"), tkChg = document.getElementById("tkChg"),
+      tkMc = document.getElementById("tkMc"), tkLiq = document.getElementById("tkLiq"),
+      tkVol = document.getElementById("tkVol"), tkHold = document.getElementById("tkHold");
+  function ticker(){
+    if(!tkPrice) return;
+    var p = state === "busted" ? 0.0000011 : px;
+    tkPrice.textContent = "$" + (BASE_PRICE * p).toFixed(6);
+    var chg = (p - 1) * 100;
+    tkChg.textContent = (chg >= 0 ? "+" : "") + chg.toFixed(1) + "%";
+    tkChg.className = "mono " + (chg >= 0 ? "up" : "down");
+    tkMc.textContent = fmtK(BASE_MC * p);
+    tkLiq.textContent = fmtK(state === "busted" ? 0 : BASE_LIQ * Math.sqrt(p));
+    tkVol.textContent = fmtK(sess.vol);
+    tkHold.textContent = String(sess.holders);
+  }
+
+  function setButtons(){
+    buyBtn.disabled = balance < 1 || state === "busted" || ffwd;
+    var can = state === "running" && inPos > 0;
+    [].forEach.call(document.querySelectorAll(".sellpct"), function(b){ b.disabled = !can; });
+  }
+
+  buyBtn.addEventListener("click", function(e){
+    if(balance < 1 || state === "busted") return;
+    var stake = betMode === "all" ? balance : Math.min(+betMode, balance);
+    if(stake < 1) return;
+
+    balance -= stake; save();
+    SND.buy();
+    balEl.textContent = money(balance);
+
+    if(state === "running"){
+      // buying into a live chart: average the entry so adding is fair
+      var held = inPos * (px / entryMult);
+      inPos = held + stake; stakeTotal += stake;
+      marks.push({i: candles.length, p: px, t: "b"});
+      fillPush("b", stake, px); sess.n += 1; sess.vol += stake;
+      entryMult = px;
+      noteEl.textContent = "In at " + px.toFixed(2) + "\u00D7 for " + money(stake) + ".";
+      setStatus("in at " + px.toFixed(2) + "\u00D7 · sell before it goes");
+      updatePos(); setButtons();
+    } else {
+      inPos = stake; entryMult = 1; stakeTotal = stake;
+      fillPush("b", stake, 1); sess.n += 1; sess.vol += stake;
+      marks.push({i: 0, p: 1, t: "b"});
+      noteEl.textContent = "In for " + money(stake) + ". Nothing is real until you sell.";
+      startRound();
+      updatePos();
+    }
+
+    if(typeof FX !== "undefined")
+      FX.burst(e.clientX, e.clientY, {count:8,color:"#3fbf72",size:6,speed:260,ttl:1});
+  });
+
+  document.getElementById("sells").addEventListener("click", function(e){
+    var b = e.target.closest(".sellpct");
+    if(!b || b.disabled) return;
+    if(state !== "running" || inPos <= 0) return;
+
+    var pct = +b.getAttribute("data-pct") / 100;
+    var live = inPos * (px / entryMult);   // what the position is worth now
+    var out = live * pct;
+
+    balance += out; save();
+    SND.sell();
+    balEl.textContent = money(balance);
+
+    // whatever is left keeps riding, re-based to the current price
+    inPos = live - out;
+    entryMult = px;
+    if(inPos < 0.5){ inPos = 0; ffwd = true; setStatus("out · fast-forwarding to see how it ends"); }
+    marks.push({i: candles.length, p: px, t: "s"});
+    fillPush("s", out, px); sess.n += 1; sess.vol += out;
+    // realized on this slice: what came out minus the share of stake it represents
+    var costShare = stakeTotal * pct; stakeTotal -= costShare;
+    sess.pnl += out - costShare;
+    if(out >= costShare) sess.wins += 1; else sess.losses += 1;
+    if(px > sess.best) sess.best = px;
+    paintSess();
+
+    setStatus("sold " + b.getAttribute("data-pct") + "% at " + px.toFixed(2) + "\u00D7 · " + money(out));
+    var fl = document.getElementById("gflash");
+    if(fl){ fl.className = "game-flash"; void fl.offsetWidth; fl.classList.add("gold"); }
+    noteEl.textContent = inPos > 0.5
+      ? "Partial exit. " + money(inPos) + " still riding."
+      : "Fully out. That is the entire thing he cannot do.";
+
+    updatePos(); setButtons();
+
+    if(typeof FX !== "undefined")
+      FX.burst(e.clientX, e.clientY, {count:14,color:"#e0b34d",size:7,speed:400,ttl:1.3});
+  });
+
+  balEl.textContent = money(balance);
+  setButtons();
+  paint(false);
+  (function idle(){ if(state === "idle" && !candles.length) paint(false); setTimeout(idle, 66); })();
+})();
+
+
+
+/* ============================================================
+   BILLBOARD BUTTONS
+   ============================================================ */
+document.getElementById("playBtn").addEventListener("click", function(e){
+  openPlayer(EPISODES[0]);
+  if(typeof FX!=="undefined")
+    FX.burst(e.clientX,e.clientY,{count:10,color:"#e0b34d",size:6,speed:300,ttl:1.1});
+});
+
+document.getElementById("infoBtn").addEventListener("click", function(){
+  openSheet("m-suit.jpg","The “Investor”",
+    "Six episodes. No arc. He begins the series down and ends the series down, having learned nothing and sold nothing. The crew were paid in exposure.");
+});
+
+/* ============================================================
+   ARE YOU STILL WATCHING?
+   ============================================================ */
+(function(){
+  var asw=document.getElementById("asw");
+  if(!asw) return;
+  var timer, shown=false;
+
+  function arm(){
+    clearTimeout(timer);
+    if(shown) return;
+    timer=setTimeout(function(){ shown=true; asw.classList.add("on"); },240000);   // four quiet minutes
+  }
+  ["pointerdown","keydown","scroll"].forEach(function(ev){
+    window.addEventListener(ev,arm,{passive:true});
+  });
+  arm();
+
+  document.getElementById("aswYes").addEventListener("click", function(){ asw.classList.remove("on"); });
+  document.getElementById("aswNo").addEventListener("click", function(){
+    asw.classList.remove("on");
+    setTimeout(function(){ showToast("he said that too"); },420);
+  });
+})();
+
+/* ============================================================
+   FX — optional. The page is complete without any of it.
+   ============================================================ */
+window.addEventListener("load", function(){
+  if(typeof FX==="undefined") return;
+  FX.shaderBg(document.getElementById("bg"),{a:"#5a1410",b:"#1a1206",bg:"#0a0a0a",grain:0.05});
+  document.querySelectorAll(".btn.red").forEach(function(b){
+    FX.magnetic(b,{radius:60,pull:0.18});
+  });
+});
+</script>
+
+</body>
+</html>

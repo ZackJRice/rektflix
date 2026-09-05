@@ -1,0 +1,200 @@
+/* ============================================================
+   MOTION KIT  ·  v1  ·  drop-in, zero dependencies
+   ------------------------------------------------------------
+   Everything here is native CSS. No GSAP, no Motion, no Lenis.
+   Reach for a library only when you need pinning or a scrubbed
+   timeline across many elements; the rest of the time this covers it.
+
+   Rules this file enforces, so you do not have to remember them:
+     1. Only transform and opacity animate. Both are composited.
+     2. Two easing curves exist. Adding a third is how a house
+        style stops being a house style.
+     3. Duration scales with distance travelled.
+     4. Every resting state is legible. Nothing is ever parked at
+        opacity:0 waiting on a script that might not run.
+     5. prefers-reduced-motion stops all of it and breaks nothing.
+
+   USAGE
+     Entrance ....... class="mk-lift" style="--i:0"   (--i staggers)
+     On scroll ...... class="mk-reveal"               (needs view())
+     Scroll fill .... class="mk-fill"  on a child of .mk-scrollref
+     Stagger ........ set --mk-stagger on the shared parent
+   ============================================================ */
+
+:root{
+  /* -------- the only two curves -------- */
+  --mk-out:    cubic-bezier(0.22, 1, 0.36, 1);   /* enters, moves, settles */
+  --mk-in-out: cubic-bezier(0.65, 0, 0.35, 1);   /* leaves and comes back  */
+
+  /* -------- duration, scaled to distance -------- */
+  --mk-t-tap:   150ms;  /* hover, focus, toggle - covers no distance   */
+  --mk-t-small: 380ms;  /* an icon, a chip, a label                    */
+  --mk-t-mid:   520ms;  /* a card, a panel, a row                      */
+  --mk-t-large: 780ms;  /* something crossing most of the viewport     */
+
+  /* -------- stagger -------- */
+  /* 50-80ms is the usable window. Below it reads as one slab,
+     above ~120ms the tail arrives after the eye has moved on. */
+  --mk-stagger: 60ms;
+}
+
+/* ============================================================
+   1. ENTRANCE
+   A CSS animation, not an observer. If anything fails, the
+   element is simply visible - which is the correct failure.
+   ============================================================ */
+
+.mk-lift{
+  animation: mk-lift var(--mk-t-mid) var(--mk-out) backwards;
+  animation-delay: calc(var(--i, 0) * var(--mk-stagger));
+}
+
+@keyframes mk-lift{
+  from{ opacity:0; transform: translateY(14px); }
+  to  { opacity:1; transform: none; }
+}
+
+/* larger travel earns a longer duration */
+.mk-lift--far{
+  --mk-t-mid: var(--mk-t-large);
+}
+.mk-lift--far{ animation-name: mk-lift-far; }
+
+@keyframes mk-lift-far{
+  from{ opacity:0; transform: translateY(38px); }
+  to  { opacity:1; transform: none; }
+}
+
+/* ============================================================
+   2. SCROLL REVEAL
+   Progressive enhancement only. Outside @supports the element
+   is already in its finished state.
+   ============================================================ */
+
+@supports (animation-timeline: view()){
+  .mk-reveal{
+    animation: mk-lift var(--mk-t-mid) var(--mk-out) both;
+    animation-timeline: view();
+    animation-range: entry 15% cover 30%;
+  }
+
+  /* a value that grows with scroll progress - spines, bars, rules */
+  .mk-scrollref{ view-timeline: --mk-ref block; }
+
+  .mk-fill{
+    transform: scaleY(0);
+    transform-origin: top;
+    animation: mk-fill linear both;
+    animation-timeline: --mk-ref;
+    animation-range: entry 80% exit 20%;
+  }
+
+  .mk-fill--x{
+    transform: scaleX(0);
+    transform-origin: left;
+    animation-name: mk-fill-x;
+  }
+
+  @keyframes mk-fill  { to{ transform: scaleY(1); } }
+  @keyframes mk-fill-x{ to{ transform: scaleX(1); } }
+
+  /* pop a marker as it enters - dots on a timeline, ticks in a list */
+  .mk-pop{
+    opacity:0;
+    transform: scale(0.4);
+    animation: mk-pop linear both;
+    animation-timeline: view();
+    animation-range: entry 40% cover 20%;
+  }
+
+  @keyframes mk-pop{
+    to{ opacity:1; transform: scale(1); }
+  }
+}
+
+/* resting states for browsers without view() - and the source of
+   truth, since these are what the markup means */
+.mk-fill  { transform: scaleY(1); }
+.mk-fill--x{ transform: scaleX(1); }
+.mk-pop   { opacity:1; transform:none; }
+
+@supports (animation-timeline: view()){
+  .mk-fill   { transform: scaleY(0); }
+  .mk-fill--x{ transform: scaleX(0); }
+  .mk-pop    { opacity:0; transform: scale(0.4); }
+}
+
+/* ============================================================
+   3. INTERACTION
+   Hovers cover no distance, so they must feel instant.
+   ============================================================ */
+
+.mk-tap{
+  transition: background var(--mk-t-tap) var(--mk-out),
+              color      var(--mk-t-tap) var(--mk-out),
+              border-color var(--mk-t-tap) var(--mk-out),
+              transform  var(--mk-t-tap) var(--mk-out);
+}
+
+.mk-tap:active{ transform: scale(0.988); }
+
+/* ============================================================
+   4. GRADE
+   Three passes over any image or panel. Put .mk-plate on a
+   positioned wrapper containing the image plus these layers.
+   Tune with --mk-grain (0-1) and --mk-vignette (0-1).
+   ============================================================ */
+
+.mk-plate{
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+}
+
+.mk-plate > img{ width:100%; height:auto; display:block; }
+
+.mk-grade,
+.mk-vignette,
+.mk-grain{
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+/* warm highlights against cool shadows. The structure is the
+   cliche; the two hues should be yours. */
+.mk-grade{
+  background:
+    linear-gradient(205deg, var(--mk-warm, oklch(0.88 0.13 70 / 0.22)) 0%, transparent 48%),
+    linear-gradient(25deg,  var(--mk-cool, oklch(0.45 0.12 285 / 0.30)) 0%, transparent 55%);
+  mix-blend-mode: soft-light;
+}
+
+.mk-vignette{
+  background: radial-gradient(118% 96% at 50% 44%,
+    transparent 40%,
+    var(--mk-shade, oklch(0.08 0.015 310 / 0.72)) 100%);
+}
+
+/* pair with an SVG feTurbulence filter named #mk-grain.
+   Keep it low over linework - grain muddies crisp edges fast. */
+.mk-grain{
+  inset: -30%;
+  opacity: var(--mk-grain, 0.20);
+  mix-blend-mode: overlay;
+}
+
+/* ============================================================
+   5. THE NON-NEGOTIABLE
+   ============================================================ */
+
+@media (prefers-reduced-motion: reduce){
+  *, *::before, *::after{
+    animation-duration: .001ms !important;
+    animation-delay: 0ms !important;
+    transition-duration: .001ms !important;
+  }
+  .mk-fill   { transform: scaleY(1) !important; }
+  .mk-fill--x{ transform: scaleX(1) !important; }
+  .mk-pop    { opacity:1 !important; transform:none !important; }
+}
