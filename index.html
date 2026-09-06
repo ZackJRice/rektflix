@@ -2661,7 +2661,9 @@ document.addEventListener("keydown", function(e){
   var BASE_PRICE = 0.00042, BASE_MC = 42000, BASE_LIQ = 8100;   // the high-water mark of the position, for the post-mortem
   var ffwd = false;   // set once you are fully out: the rest of the round plays at speed
   var px = 1, regime = "calm", regimeT = 0, wobTarget = 0, wobRate = 0.10;
-  var bleed = false, bleedT = 0, bleedFrom = 1, bleedDur = 4;   // the slow rug: price bleeds toward zero before the dev sells
+  var bleed = false, bleedT = 0, bleedFrom = 1, bleedDur = 14;   // the slow rug: price stair-steps toward zero before the dev sells
+  var bleedLog = 0, bleedTgt = 0, bleedLast = -1, bleedBig = false;
+  var candleBias = 0;   // each candle leans its own way, so red and green alternate inside the trend
   var history = [];
 
   // A crash multiplier only ever rises, which would draw a chart with
@@ -2829,14 +2831,15 @@ document.addEventListener("keydown", function(e){
       var mx = X(vi), my = Y(mk.p), up2 = mk.t === "b";
       if(mk.t === "d"){
         // the dev's exit: a small red bubble above the candle he sold on
-        var bw = 58, bh = 18, by = my - 30, bx = Math.min(w - bw - 4, Math.max(4, mx - bw/2));
+        var big = !!mk.big;
+        var bw = big ? 92 : 58, bh = big ? 26 : 18, by = my - (big ? 38 : 30), bx = Math.min(w - bw - 4, Math.max(4, mx - bw/2));
         ctx.fillStyle = RED;
         ctx.beginPath();
         if(ctx.roundRect) ctx.roundRect(bx, by - bh/2, bw, bh, 5); else ctx.rect(bx, by - bh/2, bw, bh);
         ctx.fill();
         ctx.beginPath(); ctx.moveTo(mx - 4, by + bh/2 - 1); ctx.lineTo(mx + 4, by + bh/2 - 1); ctx.lineTo(mx, by + bh/2 + 6); ctx.closePath(); ctx.fill();
-        ctx.fillStyle = "#fff"; ctx.font = "700 9.5px 'IBM Plex Mono', monospace";
-        ctx.fillText("dev sold", bx + bw/2, by + 0.5);
+        ctx.fillStyle = "#fff"; ctx.font = big ? "800 13px 'IBM Plex Mono', monospace" : "700 9.5px 'IBM Plex Mono', monospace";
+        ctx.fillText(big ? "DEV SOLD" : "dev sold", bx + bw/2, by + 0.5);
         ctx.font = "700 10px 'IBM Plex Mono', monospace";
         continue;
       }
@@ -2891,7 +2894,7 @@ document.addEventListener("keydown", function(e){
     multEl.textContent = "0.00\u00D7";
     px = 0.01;
     // the dev's exit is marked on the candle he sold on
-    marks.push({i: candles.length + (cur ? 0 : -1), p: cur ? cur.h : (candles.length ? candles[candles.length-1].h : px), t: "d"});
+    if(!bleedBig) marks.push({i: candles.length + (cur ? 0 : -1), p: cur ? cur.h : (candles.length ? candles[candles.length-1].h : px), t: "d"});
     paint(true);
     pushHistory(crashAt);
 
@@ -2945,21 +2948,33 @@ document.addEventListener("keydown", function(e){
       // the point of no return - but nobody is told. From here the true
       // multiplier is frozen and the price just bleeds. You can still
       // sell into it; that is the whole point.
-      bleed = true; bleedT = 0; bleedFrom = px; bleedDur = 3.5 + Math.random() * 3.5;
+      bleed = true; bleedT = 0; bleedFrom = px; bleedDur = 14;
+      bleedLog = 0; bleedTgt = 0; bleedLast = -1;
+      // a high chart gets a proper dev dump: one huge red candle, then the leftovers bleed
+      bleedBig = crashAt >= 12;
+      if(bleedBig){
+        bleedTgt = -(1.2 + Math.random() * 0.6);                         // -70% to -83% in one candle
+        marks.push({i: candles.length, p: cur ? cur.h : px, t: "d", big: true});
+      }
       regime = "dump";
     }
     if(bleed){
       mult = crashAt;
       bleedT += dt;
-      if(bleedT >= bleedDur){ endRound(); return; }
-      // exponential bleed to ~2% of where it broke, with dead-cat twitches
-      var k = bleedT / bleedDur;
-      var bleedPx = bleedFrom * Math.pow(0.02, k) * (1 + (Math.random() - 0.5) * 0.06 + (Math.random() < 0.03 ? Math.random() * 0.12 : 0));
-      px = Math.max(0.01, bleedPx);
+      // the bleed is a staircase: red steps down, with small green candles
+      // mixed in so it reads like one more dip until it does not
+      if(bleedTgt <= -3.5 || bleedT >= bleedDur){ endRound(); return; }
+      bleedLog += (bleedTgt - bleedLog) * (bleedBig && bleedLast === -1 ? 0.35 : 0.22) + (Math.random() - 0.5) * 0.02;
+      px = Math.max(0.01, bleedFrom * Math.exp(bleedLog));
       if(!cur) cur = {o:px, h:px, l:px, c:px};
       cur.h = Math.max(cur.h, px); cur.l = Math.min(cur.l, px); cur.c = px;
       candleT += dt;
-      if(candleT >= CANDLE_SECS){ candles.push(cur); cur = {o:px, h:px, l:px, c:px}; candleT = 0; if(candles.length > 260) candles.shift(); }
+      if(candleT >= CANDLE_SECS){
+        candles.push(cur); cur = {o:px, h:px, l:px, c:px}; candleT = 0; if(candles.length > 260) candles.shift();
+        var green = bleedLast < 0 && Math.random() < (bleedBig ? 0.3 : 0.42);
+        var stepL = green ? (0.02 + Math.random() * 0.06) : -(0.12 + Math.random() * 0.28);
+        bleedTgt += stepL; bleedLast = green ? 1 : -1;
+      }
       multEl.textContent = px.toFixed(2) + "×";
       updatePos(); paint(false);
       if(Math.random() < 0.12) tapePush();   // everyone else is running for the door
@@ -2989,7 +3004,7 @@ document.addEventListener("keydown", function(e){
       else if(roll < 0.68){ regime = "pump"; wobTarget = 0.25 + Math.random() * 0.45; wobRate = 0.12 + Math.random() * 0.12; regimeT = 0.6 + Math.random() * 1.6; }
       else { regime = "calm"; wobTarget = (Math.random() - 0.6) * 0.2; wobRate = 0.06; regimeT = 1 + Math.random() * 3; }
     }
-    wob += (wobTarget - wob) * wobRate + (Math.random() - 0.5) * 0.05;
+    wob += (wobTarget - wob) * wobRate + (Math.random() - 0.5) * 0.06 + candleBias * dt / CANDLE_SECS;
     if(wob < -1.7) wob = -1.7;
     if(wob > 0.9) wob = 0.9;
     var price = mult * Math.exp(wob);
@@ -3009,8 +3024,11 @@ document.addEventListener("keydown", function(e){
       candles.push(cur);
       cur = {o:price, h:price, l:price, c:price};
       candleT = 0;
-      // every candle gets its own character
+      // every candle gets its own character, and leans against the last one more often than not
       wickScale = 0.002 + Math.random() * Math.random() * 0.012;
+      var lastUp = candles[candles.length - 1].c >= candles[candles.length - 1].o;
+      var flip = Math.random() < 0.62 ? !lastUp : lastUp;
+      candleBias = (flip ? 1 : -1) * (0.03 + Math.random() * 0.11);
       if(candles.length > 260) candles.shift();
     }
 
