@@ -2907,7 +2907,7 @@ document.addEventListener("keydown", function(e){
     setButtons();
     setTimeout(function(){
       ruggedEl.classList.remove("on");
-      state = "idle";
+      state = "idle"; ffwd = false;   // the fast-forward flag must not outlive the round
       setButtons();
       multEl.classList.remove("bust");
       multEl.textContent = "1.00\u00D7";
@@ -3024,7 +3024,7 @@ document.addEventListener("keydown", function(e){
   }
 
   function setButtons(){
-    buyBtn.disabled = balance < 1 || state === "busted" || ffwd;
+    buyBtn.disabled = balance < 1 || state === "busted" || (ffwd && state === "running");
     var can = state === "running" && inPos > 0;
     [].forEach.call(document.querySelectorAll(".sellpct"), function(b){ b.disabled = !can; });
   }
