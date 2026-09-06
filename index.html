@@ -2514,18 +2514,20 @@ document.addEventListener("keydown", function(e){
 /* ---------- drag any rail, with release momentum ---------- */
 (function(){
   document.querySelectorAll(".rail").forEach(function(rail){
-    var down=false,startX=0,startLeft=0,vel=0,lastX=0,lastT=0,moved=0;
+    var down=false,startX=0,startLeft=0,vel=0,lastX=0,lastT=0,moved=0,captured=false;
 
     rail.addEventListener("pointerdown", function(e){
-      down=true; moved=0; startX=lastX=e.clientX; startLeft=rail.scrollLeft;
+      down=true; moved=0; captured=false; startX=lastX=e.clientX; startLeft=rail.scrollLeft;
       vel=0; lastT=performance.now();
       rail.classList.add("dragging");
-      rail.setPointerCapture(e.pointerId);
     });
 
     rail.addEventListener("pointermove", function(e){
       if(!down) return;
       var dx=e.clientX-startX; moved=Math.abs(dx);
+      // capture only once it is clearly a drag; capturing on the press
+      // would steal the click from the card underneath
+      if(moved>6 && !captured){ captured=true; try{ rail.setPointerCapture(e.pointerId); }catch(err){} }
       rail.scrollLeft=startLeft-dx;
       var now=performance.now(), dt=Math.max(now-lastT,1);
       vel=(e.clientX-lastX)/dt*16;
