@@ -1185,7 +1185,7 @@
       <p class="bb-badge" style="--i:0"><b data-brand>REKTFLIX</b> &middot; Limited Series</p>
       <h1 style="--i:1">The <q>Investor</q></h1>
       <p class="bb-meta" style="--i:2">
-        <b>2026</b> <b>1 Season</b> <b>6 Episodes</b> <b>18+</b>
+        <b>2026</b> <b>1 Season</b> <b>5 Episodes</b> <b>18+</b>
         <span>97% did not finish it</span>
       </p>
       <p class="bb-syn" style="--i:3">One man. One basement. One position he refuses to close. Filmed over eleven months by a crew who were, at several points, genuinely worried.</p>
@@ -2226,12 +2226,11 @@ var SND = (function(){
 
 var EPISODES = [
   ["EP 1","0:16","ep1.mp4","ep1.jpg","The Onboarding","In bed, hand under the sheets, scrolling. A reel said +$18,400. He swiped up with the rent.",100],
-  ["EP 2","0:13","ep2.mp4","ep2.jpg","Liquidity Provider","Footsteps on the stairs. &ldquo;Are you winning, son?&rdquo; Alt-tab to Q3 REVENUE. Thumbs up. Nuggets.",100],
-  ["EP 3","0:18","ep3.mp4","ep3.jpg","Dev Sold","WAGMI in the chat. One green candle. Then one SELL, one red candle to the floor, liquidity gone. &ldquo;Healthy correction.&rdquo;",74],
+  ["EP 2","0:18","ep3.mp4","ep3.jpg","Dev Sold","WAGMI in the chat. One green candle. Then one SELL, one red candle to the floor, liquidity gone. &ldquo;Healthy correction.&rdquo;",74],
   /* an empty video slot = still in production; the card shows a still and a "soon" tag */
-  ["EP 4","0:07","ep4.mp4","ep4.jpg","Diamond Hands","Down 97%. Hand shaking over SELL. Two sticky notes: DO NOT SELL. STILL DON'T. He hugs the monitor.",41],
-  ["EP 5","0:11","ep5.mp4","ep5.jpg","Airdrop","&ldquo;You are eligible.&rdquo; $19,400. Champagne energy drink. Then Approve wallet access. Then $0.00.",12],
-  ["EP 6","0:13","ep6.mp4","ep6.jpg","Still Here","Sunrise through the small window. Cold coffee. He types the ticker. Season 2 loading.",0]
+  ["EP 3","0:07","ep4.mp4","ep4.jpg","Diamond Hands","Down 97%. Hand shaking over SELL. Two sticky notes: DO NOT SELL. STILL DON'T. He hugs the monitor.",41],
+  ["EP 4","0:11","ep5.mp4","ep5.jpg","Airdrop","&ldquo;You are eligible.&rdquo; $19,400. Champagne energy drink. Then Approve wallet access. Then $0.00.",12],
+  ["EP 5","0:13","ep6.mp4","ep6.jpg","Still Here","Sunrise through the small window. Cold coffee. He types the ticker. Season 2 loading.",0]
 ];
 
 var TEN = [
@@ -2287,7 +2286,7 @@ function el(tag, cls, html){
         '<span class="card-play" aria-hidden="true"><span>&#9654;</span></span>'+
         '<span class="card-snd" role="button" tabindex="0" aria-label="Sound" title="Sound on/off">&#128263;</span>'+
         '<span class="card-orig" aria-hidden="true">' + CONFIG.service + ' original</span>'+
-        (e[0] === "EP 6" ? '<span class="card-new" aria-hidden="true">New</span>' : '')+
+        (e[0] === "EP 5" ? '<span class="card-new" aria-hidden="true">New</span>' : '')+
         '<span class="prog"><i data-prog="'+e[6]+'"></i></span>'+
       '</div>'+
       '<div class="card-body"><h4>'+e[4]+'</h4></div>';
@@ -3121,7 +3120,7 @@ document.getElementById("playBtn").addEventListener("click", function(e){
 
 document.getElementById("infoBtn").addEventListener("click", function(){
   openSheet("m-suit.jpg","The “Investor”",
-    "Six episodes. No arc. He begins the series down and ends the series down, having learned nothing and sold nothing. The crew were paid in exposure.");
+    "Five episodes. No arc. He begins the series down and ends the series down, having learned nothing and sold nothing. The crew were paid in exposure.");
 });
 
 /* ============================================================
