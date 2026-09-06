@@ -1239,7 +1239,7 @@
           <canvas id="crashCanvas"></canvas>
           <div class="game-mult mono" id="mult">1.00&times;</div>
           <div class="game-status" id="gstatus">press buy to enter</div>
-          <div class="rugged" id="rugged"><div><b>YOU GOT RUGGED</b><small id="rugCould"></small></div></div>
+          <div class="rugged" id="rugged"><div><b>DEV SOLD</b><small id="rugCould"></small></div></div>
           <div class="game-flash" id="gflash" aria-hidden="true"></div>
           <div class="tape" id="tape" aria-live="off"></div>
         </div>
@@ -2661,6 +2661,7 @@ document.addEventListener("keydown", function(e){
   var BASE_PRICE = 0.00042, BASE_MC = 42000, BASE_LIQ = 8100;   // the high-water mark of the position, for the post-mortem
   var ffwd = false;   // set once you are fully out: the rest of the round plays at speed
   var px = 1, regime = "calm", regimeT = 0, wobTarget = 0, wobRate = 0.10;
+  var bleed = false, bleedT = 0, bleedFrom = 1, bleedDur = 4;   // the slow rug: price bleeds toward zero before the dev sells
   var history = [];
 
   // A crash multiplier only ever rises, which would draw a chart with
@@ -2684,7 +2685,7 @@ document.addEventListener("keydown", function(e){
   var TAPE_NAMES = ["7xKp..3a", "Gm9v..q2", "dev", "whale.sol", "0xRekt", "jeet.eth", "bagz..44", "mom", "Fart..nR", "ape..ape"];
   function tapePush(){
     if(!tapeEl) return;
-    var buy = Math.random() < (regime === "dump" ? 0.3 : 0.62);
+    var buy = Math.random() < ((regime === "dump" || regime === "nuke") ? 0.3 : regime === "pump" ? 0.8 : 0.6);
     var amt = Math.round(Math.pow(10, 1 + Math.random() * 2.6));
     var who = TAPE_NAMES[Math.floor(Math.random() * TAPE_NAMES.length)];
     if(buy) sess.holders += 1; else if(sess.holders > 1 && Math.random() < 0.5) sess.holders -= 1;
@@ -2826,6 +2827,19 @@ document.addEventListener("keydown", function(e){
       var mk = marks[m], vi = mk.i - off;
       if(vi < 0 || vi >= view.length) continue;
       var mx = X(vi), my = Y(mk.p), up2 = mk.t === "b";
+      if(mk.t === "d"){
+        // the dev's exit: a small red bubble above the candle he sold on
+        var bw = 58, bh = 18, by = my - 30, bx = Math.min(w - bw - 4, Math.max(4, mx - bw/2));
+        ctx.fillStyle = RED;
+        ctx.beginPath();
+        if(ctx.roundRect) ctx.roundRect(bx, by - bh/2, bw, bh, 5); else ctx.rect(bx, by - bh/2, bw, bh);
+        ctx.fill();
+        ctx.beginPath(); ctx.moveTo(mx - 4, by + bh/2 - 1); ctx.lineTo(mx + 4, by + bh/2 - 1); ctx.lineTo(mx, by + bh/2 + 6); ctx.closePath(); ctx.fill();
+        ctx.fillStyle = "#fff"; ctx.font = "700 9.5px 'IBM Plex Mono', monospace";
+        ctx.fillText("dev sold", bx + bw/2, by + 0.5);
+        ctx.font = "700 10px 'IBM Plex Mono', monospace";
+        continue;
+      }
       // buys sit under the candle, sells above it, so they never hide the price
       var cy = my;
       my += up2 ? 16 : -16;
@@ -2857,7 +2871,7 @@ document.addEventListener("keydown", function(e){
   function startRound(){
     crashAt = drawCrashPoint();
     elapsed = 0; lastFrame = performance.now();
-    mult = 1; px = 1; wob = 0; candleT = 0; wickScale = 0.03; ffwd = false; idleDim = false;
+    mult = 1; px = 1; wob = 0; candleT = 0; wickScale = 0.03; ffwd = false; idleDim = false; bleed = false; bleedT = 0;
     bestVal = 0; bestPx = 1; stakeTotal = 0;
     regime = "calm"; wobTarget = 0; wobRate = 0.10; regimeT = 2 + Math.random() * 4;
     candles = []; cur = {o:1, h:1, l:1, c:1}; marks = [];
@@ -2874,7 +2888,10 @@ document.addEventListener("keydown", function(e){
     state = "busted";
     multEl.classList.remove("up");
     multEl.classList.add("bust");
-    multEl.textContent = crashAt.toFixed(2) + "\u00D7";
+    multEl.textContent = "0.00\u00D7";
+    px = 0.01;
+    // the dev's exit is marked on the candle he sold on
+    marks.push({i: candles.length + (cur ? 0 : -1), p: cur ? cur.h : (candles.length ? candles[candles.length-1].h : px), t: "d"});
     paint(true);
     pushHistory(crashAt);
 
@@ -2885,22 +2902,15 @@ document.addEventListener("keydown", function(e){
     if(flash){ flash.className = "game-flash"; void flash.offsetWidth; flash.classList.add("red"); }
 
     if(inPos > 0){
-      ruggedEl.classList.add("on");
-      var could = document.getElementById("rugCould");
       var madeIt = bestVal > stakeTotal + 0.5;
-      if(could){
-        could.textContent = madeIt
-          ? "you could have sold for " + money(bestVal) + " at " + bestPx.toFixed(2) + "×"
-          : "it never went above what you put in";
-      }
-      setStatus("rugged at " + crashAt.toFixed(2) + "× · " + money(inPos) + " gone");
+      setStatus("dev sold · " + money(inPos) + " gone" + (madeIt ? " · you could have sold for " + money(bestVal) + " at " + bestPx.toFixed(2) + "×" : ""));
       sess.pnl -= stakeTotal; sess.losses += 1; paintSess();
       noteEl.textContent = madeIt
         ? "Peak was " + money(bestVal) + ". He would tell you it is only a loss if you look at it."
         : "He would tell you it is only a loss if you look at it.";
       inPos = 0;
     } else {
-      setStatus((ffwd ? "you were out, it went on to " : "it went at ") + crashAt.toFixed(2) + "\u00D7");
+      setStatus((ffwd ? "you were out. dev sold after " : "dev sold after ") + crashAt.toFixed(2) + "\u00D7");
     }
     updatePos();
     setButtons();
@@ -2931,26 +2941,58 @@ document.addEventListener("keydown", function(e){
     // gentle at first, then it runs: 2x at ~16s, 10x at ~42s, 100x at ~75s
     mult = Math.exp(0.115 * elapsed + 0.0009 * elapsed * elapsed);   // 2x ~5.5s, 10x ~16s, 100x ~31s
 
-    if(mult >= crashAt){ endRound(); return; }
+    if(mult >= crashAt && !bleed){
+      // the point of no return - but nobody is told. From here the true
+      // multiplier is frozen and the price just bleeds. You can still
+      // sell into it; that is the whole point.
+      bleed = true; bleedT = 0; bleedFrom = px; bleedDur = 3.5 + Math.random() * 3.5;
+      regime = "dump";
+    }
+    if(bleed){
+      mult = crashAt;
+      bleedT += dt;
+      if(bleedT >= bleedDur){ endRound(); return; }
+      // exponential bleed to ~2% of where it broke, with dead-cat twitches
+      var k = bleedT / bleedDur;
+      var bleedPx = bleedFrom * Math.pow(0.02, k) * (1 + (Math.random() - 0.5) * 0.06 + (Math.random() < 0.03 ? Math.random() * 0.12 : 0));
+      px = Math.max(0.01, bleedPx);
+      if(!cur) cur = {o:px, h:px, l:px, c:px};
+      cur.h = Math.max(cur.h, px); cur.l = Math.min(cur.l, px); cur.c = px;
+      candleT += dt;
+      if(candleT >= CANDLE_SECS){ candles.push(cur); cur = {o:px, h:px, l:px, c:px}; candleT = 0; if(candles.length > 260) candles.shift(); }
+      multEl.textContent = px.toFixed(2) + "×";
+      updatePos(); paint(false);
+      if(Math.random() < 0.12) tapePush();   // everyone else is running for the door
+      requestAnimationFrame(tick);
+      return;
+    }
 
-    // The true multiplier only rises. A mean-reverting wobble on top of
-    // it gives candles that close red inside the uptrend, and a separate
-    // per-frame wick probe gives the long random shadows a memecoin
-    // chart is mostly made of. Neither touches the payout - a cash-out
-    // always settles on the true multiplier.
-    // regimes: calm noise, a dump that slides 30-60% under the trend and
-    // then claws back, or a pump that spikes 20-60% over it and fades
+    // The true multiplier only rises; the rug fires on it. The price you
+    // see and trade at is that trend times a deviation held in log space,
+    // so it can run to 10x, bleed back to 3x, and go again - a memecoin
+    // chart, not a crash curve. Regimes:
+    //   calm     small noise, drifting back toward the trend
+    //   dump     a slide to 30-70% of trend over a few seconds
+    //   nuke     rare: down to ~20% of trend in one move
+    //   recover  the claw back toward (or past) the trend
+    //   pump     a spike 30-100% over trend, then it fades
     regimeT -= dt;
     if(regimeT <= 0){
       var roll = Math.random();
-      if(regime !== "calm"){ regime = "calm"; wobTarget = 0; wobRate = 0.06; regimeT = 3 + Math.random() * 6; }
-      else if(roll < 0.42){ regime = "dump"; wobTarget = -(0.22 + Math.random() * 0.22); wobRate = 0.05; regimeT = 1.5 + Math.random() * 3; }
-      else if(roll < 0.62){ regime = "pump"; wobTarget = 0.15 + Math.random() * 0.30; wobRate = 0.22; regimeT = 0.5 + Math.random() * 1.2; }
-      else { regime = "calm"; wobTarget = -(Math.random() * 0.06); wobRate = 0.10; regimeT = 2 + Math.random() * 5; }
+      if(regime === "dump" || regime === "nuke"){
+        // what goes down usually comes back, sometimes with an overshoot
+        regime = "recover"; wobTarget = Math.random() < 0.35 ? 0.15 + Math.random() * 0.25 : 0; wobRate = 0.035 + Math.random() * 0.03; regimeT = 1.5 + Math.random() * 3;
+      }
+      else if(regime === "pump"){ regime = "calm"; wobTarget = -(Math.random() * 0.15); wobRate = 0.05; regimeT = 1 + Math.random() * 3; }
+      else if(roll < 0.36){ regime = "dump"; wobTarget = -(0.35 + Math.random() * 0.85); wobRate = 0.03 + Math.random() * 0.03; regimeT = 1.5 + Math.random() * 3; }
+      else if(roll < 0.42){ regime = "nuke"; wobTarget = -(1.2 + Math.random() * 0.4); wobRate = 0.16; regimeT = 0.6 + Math.random() * 0.8; }
+      else if(roll < 0.68){ regime = "pump"; wobTarget = 0.25 + Math.random() * 0.45; wobRate = 0.12 + Math.random() * 0.12; regimeT = 0.6 + Math.random() * 1.6; }
+      else { regime = "calm"; wobTarget = (Math.random() - 0.6) * 0.2; wobRate = 0.06; regimeT = 1 + Math.random() * 3; }
     }
-    wob += (wobTarget - wob) * wobRate + (Math.random() - 0.5) * 0.065 - 0.003;   // noisier, with a lean down
-    if(wob < -0.85) wob = -0.85;
-    var price = mult * (1 + wob);
+    wob += (wobTarget - wob) * wobRate + (Math.random() - 0.5) * 0.05;
+    if(wob < -1.7) wob = -1.7;
+    if(wob > 0.9) wob = 0.9;
+    var price = mult * Math.exp(wob);
     px = price;
 
     if(!cur) cur = {o:price, h:price, l:price, c:price};
